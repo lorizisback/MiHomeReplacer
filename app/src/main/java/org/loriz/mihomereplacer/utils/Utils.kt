@@ -2,7 +2,6 @@ package org.loriz.mihomereplacer.utils
 
 import android.app.ActivityManager
 import android.content.Context
-import android.content.Context.ACTIVITY_SERVICE
 import android.app.Activity
 import android.content.pm.PackageManager
 import org.loriz.mihomereplacer.R
@@ -10,6 +9,7 @@ import android.content.DialogInterface
 import android.os.Build
 import android.support.v7.app.AlertDialog
 import org.loriz.mihomereplacer.MainActivity
+import java.io.File
 
 
 /**
@@ -80,6 +80,21 @@ class Utils {
                     .show()
         }
 
+
+        fun getList(parentDir: File): List<String> {
+            val inFiles = ArrayList<String>()
+            val files = parentDir.listFiles()
+            for (file in files!!) {
+                if (file.isDirectory) {
+                    inFiles.addAll(getList(file))
+                } else {
+                    if (file.name.endsWith(".apk")) {
+                        inFiles.add(file.name.removeSuffix(".apk"))
+                    }
+                }
+            }
+            return inFiles
+        }
 
 
     }

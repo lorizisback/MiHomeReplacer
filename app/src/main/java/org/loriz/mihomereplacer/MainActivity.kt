@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import kotlinx.android.synthetic.main.top_panel.*
+import org.loriz.mihomereplacer.fragments.MainPanelFragment
 import org.loriz.mihomereplacer.utils.Utils
 
 /**
@@ -68,12 +69,19 @@ class MainActivity : AppCompatActivity() {
         ////////////////////////////////////////////////////////////
 
 
-        //////////////////// setup main panel //////////////////////
+    }
 
+    override fun onResume() {
 
+        var fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
 
+        var frag = MainPanelFragment()
 
+        fragmentTransaction.add(R.id.mainPanel, frag)
+        fragmentTransaction.commit()
 
+        super.onResume()
     }
 
 
