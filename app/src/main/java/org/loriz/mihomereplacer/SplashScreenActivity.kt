@@ -4,10 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
-import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_splashscreen.*
 import org.jsoup.select.Elements
-import org.loriz.mihomereplacer.core.models.MiItem
+import org.loriz.mihomereplacer.core.Constants
 import org.loriz.mihomereplacer.update.UpdateAllTask
+import org.loriz.mihomereplacer.utils.Utils
 
 
 /**
@@ -17,32 +18,29 @@ import org.loriz.mihomereplacer.update.UpdateAllTask
 
 class SplashScreenActivity : AppCompatActivity() {
 
-    var miItemsMap : HashMap<Int, MiItem> = hashMapOf()
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         setContentView(R.layout.activity_splashscreen)
 
         Handler().postDelayed({
 
-        try {
-
             object : UpdateAllTask() {
 
                 override fun onPostExecute(result: Elements?) {
+
+                    splashscreen_text.text = baseContext.resources.getString(R.string.updating)
+
                     super.onPostExecute(result)
 
-                    this@SplashScreenActivity.startActivity(Intent(this@SplashScreenActivity, MainActivity::class.java))
+                    if (Constants.MI_ITEMS.isEmpty()) {
+                        Utils.showFatalErrorDialog(this@SplashScreenActivity)
+                    } else {
+                        this@SplashScreenActivity.startActivity(Intent(this@SplashScreenActivity, MainActivity::class.java))
+                    }
+
                 }
 
             }.execute()
-
-        }catch (e : Exception) {
-
-            Toast.makeText(this@SplashScreenActivity, "Errore di rete! Si prega di riprovare piu' tardi.", Toast.LENGTH_LONG).show()
-            finish()
-        }
-
 
         }, 1500L)
 

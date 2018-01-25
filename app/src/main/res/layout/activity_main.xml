@@ -1,17 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <!--<FrameLayout
+        android:id="@+id/topPanel"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="CIAONE"/>
+        android:layout_height="80dp">
+    </FrameLayout>-->
 
-    <TextView
-        android:id="@+id/button"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:text="CHECK"/>
+    <include layout="@layout/top_panel"
+        android:layout_width="match_parent"
+        android:layout_height="80dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/separator"/>
+
+    <FrameLayout
+        android:id="@+id/mainPanel"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+    </FrameLayout>
+
+
 
 </LinearLayout>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- MARGIN -->
+    <dimen name="margin_xxs">2dp</dimen>
+    <dimen name="margin_xs">5dp</dimen>
+    <dimen name="margin_s">10dp</dimen>
+    <dimen name="margin_m">15dp</dimen>
+    <dimen name="margin_l">20dp</dimen>
+    <dimen name="margin_xl">30dp</dimen>
+    <dimen name="margin_xxl">40dp</dimen>
+    <dimen name="margin_xxxl">50dp</dimen>
+
+
+    <!-- PADDING -->
+    <dimen name="padding_xxs">2dp</dimen>
+    <dimen name="padding_xs">5dp</dimen>
+    <dimen name="padding_s">10dp</dimen>
+    <dimen name="padding_m">15dp</dimen>
+    <dimen name="padding_l">20dp</dimen>
+    <dimen name="padding_xl">30dp</dimen>
+    <dimen name="padding_xxl">40dp</dimen>
+    <dimen name="padding_xxxl">50dp</dimen>
+
+
+    <!-- TEXT -->
+    <dimen name="text_size_xxxs">10dp</dimen>
+    <dimen name="text_size_xxs">12dp</dimen>
+    <dimen name="text_size_xs">14dp</dimen>
+    <dimen name="text_size_s">16dp</dimen>
+    <dimen name="text_size_m">17dp</dimen>
+    <dimen name="text_size_l">19dp</dimen>
+    <dimen name="text_size_xl">21dp</dimen>
+    <dimen name="text_size_xxl">25dp</dimen>
+    <dimen name="text_size_xxxl">41dp</dimen>
+
+</resources>

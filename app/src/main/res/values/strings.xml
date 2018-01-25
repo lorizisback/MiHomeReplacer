@@ -1,3 +1,20 @@
 <resources>
-    <string name="app_name">MiHomeReplacer</string>
+
+    <string name="mi_home_package_name">com.xiaomi.smarthome</string>
+    <string name="mi_home_version_prefix">v.</string>
+    <string name="mi_home_not_detected">Nessun MiHome non installato!</string>
+
+    <string name="app_name">MiHome Replacer</string>
+
+    <!-- HOME -->
+    <string name="no_content_here">Niente da fare qui!</string>
+    <string name="mihome_mod_detected">MiHome P rilevato!</string>
+    <string name="mihome_stock_detected">MiHome rilevato!</string>
+
+    <!-- SPLASHSCREEN -->
+    <string name="connecting">Connessione in corso...</string>
+    <string name="updating">Aggiornamento...</string>
+    <string name="error_network_text">Errore di rete! Si prega di riprovare piu\' tardi.</string>
+    <string name="error_network_title">Attenzione</string>
+
 </resources>

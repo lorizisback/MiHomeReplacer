@@ -11,19 +11,24 @@ import org.loriz.mihomereplacer.core.models.MiItem
  * Created by loriz on 1/24/18.
  */
 
-open class UpdateAllTask : AsyncTask<Void, Void, Elements>() {
+open class UpdateAllTask : AsyncTask<Void, Void, Elements?>() {
 
 
-    override fun doInBackground(vararg params: Void?): Elements {
-        val doc  = Jsoup.connect("http://www.xcapesoft.cloud/").get()
-        val bottomMask = Jsoup.connect(doc.select("frame[name=bottommask]").first().absUrl("src")).get()
-        val electro = bottomMask.select("div#Electro")
-        val li = electro.select("div#cbp-pgcontainer > ul > li")
-       // val li = ul.select("li")
-        return li
+    override fun doInBackground(vararg params: Void?): Elements? {
+
+        try {
+            val doc  = Jsoup.connect("http://www.xcapesoft.cloud/").get()
+            val bottomMask = Jsoup.connect(doc.select("frame[name=bottommask]").first().absUrl("src")).get()
+            val electro = bottomMask.select("div#Electro")
+            return electro.select("div#cbp-pgcontainer > ul > li")
+        } catch (e: Exception) {
+            return null
+        }
+
     }
 
     override fun onPostExecute(result: Elements?) {
+
 
         result?.forEach {
 

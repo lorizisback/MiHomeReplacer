@@ -3,4 +3,8 @@
     <color name="colorPrimary">#2bb786</color>
     <color name="colorPrimaryDark">#218c67</color>
     <color name="colorAccent">#247be7</color>
+
+    <color name="darkText">#333333</color>
+    <color name="lightText">#999999</color>
+    <color name="separator">#dddddd</color>
 </resources>
