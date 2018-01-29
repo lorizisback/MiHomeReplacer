@@ -12,6 +12,8 @@ class MiItem {
     var folderNumber : Int? = null
     var itemNumber : Int? = null
     var downloadLink : String? = null
+    var latestmd5: String? = null
+    var latestVersion: String? = null
 
 
     fun set(itemName : String?, imgLink: String?, folderNumber: Int?, itemNumber: Int?, downloadLink: String?) {
@@ -21,5 +23,7 @@ class MiItem {
         this.itemNumber = itemNumber
         this.downloadLink = downloadLink
     }
+
+
 
 }

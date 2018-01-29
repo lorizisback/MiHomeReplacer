@@ -8,7 +8,7 @@ import org.loriz.mihomereplacer.R
 import android.content.DialogInterface
 import android.os.Build
 import android.support.v7.app.AlertDialog
-import org.loriz.mihomereplacer.MainActivity
+import org.loriz.mihomereplacer.SplashScreenActivity
 import java.io.File
 
 
@@ -65,37 +65,47 @@ class Utils {
         }
 
 
-        fun showFatalErrorDialog(context: Context) {
+        fun showFatalErrorDialog(context: Context, text: String) {
             val builder: AlertDialog.Builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert)
             } else {
                 AlertDialog.Builder(context)
             }
-            builder.setTitle(context.resources.getString(R.string.error_network_title))
-                    .setMessage(context.resources.getString(R.string.error_network_text))
+            builder.setTitle(context.resources.getString(R.string.error_title))
+                    .setMessage(text)
                     .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
-                        (context as MainActivity).finish()
+                        (context as SplashScreenActivity).finish()
                     })
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show()
         }
 
 
-        fun getList(parentDir: File): List<String> {
-            val inFiles = ArrayList<String>()
+        fun getInstalledMiItems(parentDir: File): HashMap<Int, ArrayList<String>>? {
+            val inFiles = HashMap<Int, ArrayList<String>>()
             val files = parentDir.listFiles()
-            for (file in files!!) {
-                if (file.isDirectory) {
-                    inFiles.addAll(getList(file))
-                } else {
-                    if (file.name.endsWith(".apk")) {
-                        inFiles.add(file.name.removeSuffix(".apk"))
+            if (files != null && files.isNotEmpty() ) {
+                for (file in files) {
+                    if (file.isDirectory) {
+                        val map = getInstalledMiItems(file)
+                        if (map != null && map.isNotEmpty()) {
+                            inFiles.putAll(map)
+                        }
+                    } else {
+                        if (file.name.endsWith(".apk")) {
+                            inFiles.put(file.parent.split("/").last().toInt(), arrayListOf(file.name.removeSuffix(".apk")))
+                        }
                     }
                 }
             }
+
             return inFiles
         }
 
+
+        enum class PluginLanguage {
+            CHINESE, ITALIAN
+        }
 
     }
 

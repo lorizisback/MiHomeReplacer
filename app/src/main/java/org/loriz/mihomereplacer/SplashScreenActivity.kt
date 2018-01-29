@@ -1,8 +1,12 @@
 package org.loriz.mihomereplacer
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator
@@ -27,43 +31,33 @@ import org.loriz.mihomereplacer.utils.Utils
 
 class SplashScreenActivity : AppCompatActivity() {
 
+    private val READ_CONTACTS_ID: Int = 1337
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         setContentView(R.layout.activity_splashscreen)
 
+        setupImageHandling()
+
+        if ( ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE ) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),  READ_CONTACTS_ID)
+        } else {
+            updateAndStart()
+        }
 
 
-        ImageUtils.setup(this)
+        super.onCreate(savedInstanceState)
 
-        ImageUtils.configBuilder = ImageLoaderConfiguration.Builder(this)
-                .threadPoolSize(3)
-                .threadPriority(3)
-                //.imageDownloader(UserAgentImageDownloader(this))
-                .imageDownloader(BaseImageDownloader(this))
-                .tasksProcessingOrder(QueueProcessingType.LIFO)
-                .memoryCache(UsingFreqLimitedMemoryCache(2000000))
-                .diskCache(UnlimitedDiskCache(StorageUtils.getCacheDirectory(this)))
-                .diskCacheFileNameGenerator(HashCodeFileNameGenerator())
-                .defaultDisplayImageOptions(DisplayImageOptions.createSimple())
-
-        ImageUtils.displayOptionsBuilder
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-//                .showImageOnFail(R.drawable.placeholder_newsfeed)
-        //.showImageForEmptyUri(R.drawable.mi_home_stock)
-//                .showImageOnLoading(R.drawable.placeholder_newsfeed)
-        //.displayer(new FadeInBitmapDisplayer(200))
-        //.showImageOnLoading(R.drawable.image_ph)
+    }
 
 
-        ImageUtils.build()
 
-
+    private fun updateAndStart() {
 
         Handler().postDelayed({
 
-            object : UpdateAllTask() {
+            object : UpdateAllTask(this) {
 
                 override fun onPostExecute(result: Elements?) {
 
@@ -72,8 +66,8 @@ class SplashScreenActivity : AppCompatActivity() {
                     super.onPostExecute(result)
 
                     if (Constants.MI_ITEMS.isEmpty()) {
+                        this@SplashScreenActivity.runOnUiThread { Utils.showFatalErrorDialog(this@SplashScreenActivity, resources.getString(R.string.error_network_text)) }
                         finish()
-                        Utils.showFatalErrorDialog(this@SplashScreenActivity)
                     } else {
                         this@SplashScreenActivity.startActivity(Intent(this@SplashScreenActivity, MainActivity::class.java))
                     }
@@ -84,8 +78,48 @@ class SplashScreenActivity : AppCompatActivity() {
 
         }, 1500L)
 
-        super.onCreate(savedInstanceState)
+    }
 
+
+
+    private fun setupImageHandling() {
+        ImageUtils.setup(this)
+
+        ImageUtils.configBuilder = ImageLoaderConfiguration.Builder(this)
+                .threadPoolSize(3)
+                .threadPriority(3)
+                .imageDownloader(BaseImageDownloader(this))
+                .tasksProcessingOrder(QueueProcessingType.LIFO)
+                .memoryCache(UsingFreqLimitedMemoryCache(2000000))
+                .diskCache(UnlimitedDiskCache(StorageUtils.getCacheDirectory(this)))
+                .diskCacheFileNameGenerator(HashCodeFileNameGenerator())
+                .defaultDisplayImageOptions(DisplayImageOptions.createSimple())
+
+        ImageUtils.displayOptionsBuilder
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+
+        ImageUtils.build()
+
+    }
+
+
+
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            READ_CONTACTS_ID -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    updateAndStart()
+                } else {
+                  //  this@SplashScreenActivity.runOnUiThread { Utils.showFatalErrorDialog(this@SplashScreenActivity, resources.getString(R.string.error_permission_text)) }
+                    finish()
+                }
+                return
+            }
+
+            else -> { }
+        }
     }
 
 

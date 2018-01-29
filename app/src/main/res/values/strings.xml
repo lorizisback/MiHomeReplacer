@@ -10,11 +10,15 @@
     <string name="no_content_here">Niente da fare qui!</string>
     <string name="mihome_mod_detected">MiHome P rilevato!</string>
     <string name="mihome_stock_detected">MiHome rilevato!</string>
+    <string name="miitem_installed_version_label">Installata: </string>
+    <string name="miitem_latest_version_label">Ultima: </string>
+
 
     <!-- SPLASHSCREEN -->
     <string name="connecting">Connessione in corso...</string>
     <string name="updating">Aggiornamento...</string>
     <string name="error_network_text">Errore di rete! Si prega di riprovare piu\' tardi.</string>
-    <string name="error_network_title">Attenzione</string>
+    <string name="error_permission_text">Questa applicazione non puo\' funzionare senza i permessi che hai negato!</string>
+    <string name="error_title">Attenzione</string>
 
 </resources>
