@@ -2,11 +2,13 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mi_item_container"
     android:orientation="vertical"
     android:layout_margin="@dimen/margin_m"
     android:layout_width="match_parent"
     android:layout_height="130dp"
-    android:background="@color/mihome_item_background">
+    android:background="@drawable/mihome_item_border"
+    android:elevation="5dp">
 
 
     <ImageView

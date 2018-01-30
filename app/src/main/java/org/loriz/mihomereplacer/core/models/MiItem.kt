@@ -1,5 +1,7 @@
 package org.loriz.mihomereplacer.core.models
 
+import org.loriz.mihomereplacer.utils.Utils
+
 /**
  * Created by loriz on 1/24/18.
  */
@@ -12,8 +14,13 @@ class MiItem {
     var folderNumber : Int? = null
     var itemNumber : Int? = null
     var downloadLink : String? = null
-    var latestmd5: String? = null
-    var latestVersion: String? = null
+    var latestItaMD5: String? = null
+    var latestVersion: Int? = null
+    var previousItaMD5: String? = null
+    var previousVersion: Int? = null
+    var installedVersion : Int? = null
+    var language : Utils.Companion.Flag? = null
+    var md5 : String? = null
 
 
     fun set(itemName : String?, imgLink: String?, folderNumber: Int?, itemNumber: Int?, downloadLink: String?) {

@@ -11,7 +11,7 @@
     <string name="mihome_mod_detected">MiHome P rilevato!</string>
     <string name="mihome_stock_detected">MiHome rilevato!</string>
     <string name="miitem_installed_version_label">Installata: </string>
-    <string name="miitem_latest_version_label">Ultima: </string>
+    <string name="miitem_latest_version_label">Disponibile: </string>
 
 
     <!-- SPLASHSCREEN -->

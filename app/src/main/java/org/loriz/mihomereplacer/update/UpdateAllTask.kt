@@ -9,7 +9,7 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.jsoup.Jsoup
 import org.jsoup.select.Elements
 import org.loriz.mihomereplacer.core.Constants
-import org.loriz.mihomereplacer.core.models.MiDescriptor
+import org.loriz.mihomereplacer.core.models.MiItemEntry
 import org.loriz.mihomereplacer.core.models.MiItem
 import java.io.FileOutputStream
 import java.io.IOException
@@ -27,28 +27,16 @@ import java.nio.charset.Charset
 open class UpdateAllTask(val context: Context) : AsyncTask<Void, Void, Elements?>() {
 
     val url : String = "http://xcape.esy.es/xiaomi/smarthome/PLUGIN.JSON"
+
     val mObjectMapper = ObjectMapper().registerModule(KotlinModule())
-    var siteMap = hashMapOf<Int, MiDescriptor>()
+    var siteMap = hashMapOf<Int, MiItemEntry>()
 
     override fun doInBackground(vararg params: Void?): Elements? {
 
         //download plugin.json
         if (downloadFile(url) != true) return null
 
-        try {
-            val inputStream = context.openFileInput("plugins.json")
-            val size = inputStream.available()
-            val buffer = ByteArray(size)
-            inputStream.read(buffer)
-            inputStream.close()
-
-            val composition = String(buffer, Charset.forName("UTF-8"))
-            val typeRef = object : TypeReference<HashMap<Int, MiDescriptor>>() {}
-            siteMap = mObjectMapper.readValue<HashMap<Int, MiDescriptor>>(composition, typeRef)
-
-        } catch (ex: Exception) {
-            return null
-        }
+        if (parseJSON() != true) return null
 
         // scrape descriptor
         try {
@@ -60,6 +48,26 @@ open class UpdateAllTask(val context: Context) : AsyncTask<Void, Void, Elements?
             return null
         }
 
+    }
+
+    private fun parseJSON(): Boolean {
+
+        try {
+            val inputStream = context.openFileInput("plugins.json")
+            val size = inputStream.available()
+            val buffer = ByteArray(size)
+            inputStream.read(buffer)
+            inputStream.close()
+
+            val composition = String(buffer, Charset.forName("UTF-8"))
+            val typeRef = object : TypeReference<HashMap<Int, MiItemEntry>>() {}
+            siteMap = mObjectMapper.readValue<HashMap<Int, MiItemEntry>>(composition, typeRef)
+
+        } catch (ex: Exception) {
+            return false
+        }
+
+        return true
     }
 
 
@@ -84,8 +92,10 @@ open class UpdateAllTask(val context: Context) : AsyncTask<Void, Void, Elements?
             val itemNum = bottomContainer[1].select("span").toString()
             miItem.itemNumber = Html.fromHtml(itemNum).split("\n").last().toInt()
 
-            miItem.latestmd5 = siteMap[miItem.folderNumber as Int]?.md5
-            miItem.latestVersion = siteMap[miItem.folderNumber as Int]?.lastPlugin
+            miItem.latestItaMD5 = siteMap[miItem.folderNumber as Int]?.md5
+            miItem.previousItaMD5 = siteMap[miItem.folderNumber as Int]?.md5Old
+            miItem.latestVersion = siteMap[miItem.folderNumber as Int]?.lastPlugin?.toInt()
+            miItem.previousVersion = siteMap[miItem.folderNumber as Int]?.oldPlugin?.toInt()
 
             miItem.downloadLink = bottomContainer[2].select("span > div.cbp-pgopttooltip").select("span").select("a").first().attr("href")
 

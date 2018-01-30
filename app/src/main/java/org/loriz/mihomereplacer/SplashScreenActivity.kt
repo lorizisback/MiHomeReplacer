@@ -31,7 +31,7 @@ import org.loriz.mihomereplacer.utils.Utils
 
 class SplashScreenActivity : AppCompatActivity() {
 
-    private val READ_CONTACTS_ID: Int = 1337
+    private val WRITE_EXT: Int = 1
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +41,7 @@ class SplashScreenActivity : AppCompatActivity() {
         setupImageHandling()
 
         if ( ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE ) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),  READ_CONTACTS_ID)
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),  WRITE_EXT)
         } else {
             updateAndStart()
         }
@@ -67,16 +67,16 @@ class SplashScreenActivity : AppCompatActivity() {
 
                     if (Constants.MI_ITEMS.isEmpty()) {
                         this@SplashScreenActivity.runOnUiThread { Utils.showFatalErrorDialog(this@SplashScreenActivity, resources.getString(R.string.error_network_text)) }
-                        finish()
                     } else {
                         this@SplashScreenActivity.startActivity(Intent(this@SplashScreenActivity, MainActivity::class.java))
+                        finish()
                     }
 
                 }
 
             }.execute()
 
-        }, 1500L)
+        }, 2000)
 
     }
 
@@ -108,12 +108,12 @@ class SplashScreenActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int,
                                             permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
-            READ_CONTACTS_ID -> {
+            WRITE_EXT -> {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     updateAndStart()
                 } else {
-                  //  this@SplashScreenActivity.runOnUiThread { Utils.showFatalErrorDialog(this@SplashScreenActivity, resources.getString(R.string.error_permission_text)) }
-                    finish()
+                    this@SplashScreenActivity.runOnUiThread { Utils.showFatalErrorDialog(this@SplashScreenActivity, resources.getString(R.string.error_permission_text)) }
+
                 }
                 return
             }

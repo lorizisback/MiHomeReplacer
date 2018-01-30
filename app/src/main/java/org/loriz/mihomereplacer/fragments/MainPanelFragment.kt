@@ -9,13 +9,13 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_main_panel.*
 import org.loriz.mihomereplacer.R
 import org.loriz.mihomereplacer.core.Constants
-import org.loriz.mihomereplacer.core.models.InstalledMiItem
 import org.loriz.mihomereplacer.utils.MD5
 import org.loriz.mihomereplacer.utils.Utils
 import java.io.File
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
-import org.loriz.mihomereplacer.core.adapters.MiListAdapter
+import org.loriz.mihomereplacer.core.adapters.HomeListAdapter
+import org.loriz.mihomereplacer.core.models.MiItem
 
 
 /**
@@ -24,14 +24,11 @@ import org.loriz.mihomereplacer.core.adapters.MiListAdapter
 
 class MainPanelFragment : Fragment() {
 
-    var installedPlugins : LinkedHashMap<Int, ArrayList<InstalledMiItem>> = linkedMapOf()
+    val path = Environment.getExternalStorageDirectory().path + "/plugin/download"
+    val extension = ".mpk"
 
-    var listInstalledPlugins : ArrayList<Pair<Int, InstalledMiItem>> = arrayListOf()
-
-    val path = Environment.getExternalStorageDirectory().path + "/plugin/installed"
-    val extension = ".apk"
-
-    var mAdapter : MiListAdapter? = null
+    var mAdapter : HomeListAdapter? = null
+    var listInstalledPlugins: ArrayList<Pair<Int, MiItem>> = arrayListOf()
 
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -47,34 +44,30 @@ class MainPanelFragment : Fragment() {
             refreshList()
         }*/
 
-        Utils.getInstalledMiItems(File(path))?.forEach {
+        Utils.getLatestInstalledMiItems(File(path), extension)?.forEach {
             val key = it.key
 
-            it.value.forEach {
+            var item = Constants.MI_ITEMS[key]
 
-                var item = InstalledMiItem()
-                item.miItem = Constants.MI_ITEMS[key]
-                item.installedVersion = it
-                item.md5 = MD5.calculateMD5(File(path + "/" + key + "/" + it + extension))
-                if (item.md5 == item.miItem?.latestmd5) {
-                    item.language = Utils.Companion.PluginLanguage.ITALIAN
+            if (item != null) {
+                item.installedVersion = it.value.toInt()
+                item.md5 = MD5.calculateMD5(File(path + "/" + key + "/" + it.value + extension))
+                item.language = if (item.md5 != null && Utils.isPluginItalian(item.md5 as String)) {
+                    Utils.Companion.Flag.ITALIAN
+                } else if (item.installedVersion as Int >= item.previousVersion as Int) {
+                    Utils.Companion.Flag.CHINESE
                 } else {
-                    item.language = Utils.Companion.PluginLanguage.CHINESE
-                }
-
-                if (installedPlugins[key] != null) {
-                    installedPlugins[key]?.add(item)
-                } else {
-                    installedPlugins.put(key, arrayListOf(item))
+                    Utils.Companion.Flag.OTHER
                 }
 
                 listInstalledPlugins.add(Pair(key, item))
             }
 
+
         }
 
 
-        mAdapter = MiListAdapter(context, listInstalledPlugins)
+        mAdapter = HomeListAdapter(context, listInstalledPlugins)
         val mLayoutManager = LinearLayoutManager(context)
         recyclerview.setLayoutManager(mLayoutManager)
         recyclerview.setItemAnimator(DefaultItemAnimator())

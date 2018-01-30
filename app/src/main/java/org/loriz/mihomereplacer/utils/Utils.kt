@@ -6,9 +6,9 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import org.loriz.mihomereplacer.R
 import android.content.DialogInterface
-import android.os.Build
 import android.support.v7.app.AlertDialog
 import org.loriz.mihomereplacer.SplashScreenActivity
+import org.loriz.mihomereplacer.core.Constants
 import java.io.File
 
 
@@ -34,9 +34,15 @@ class Utils {
         }
 
         fun killProcess(context: Context, packageName: String) {
-                val am = context.getSystemService(Activity.ACTIVITY_SERVICE) as ActivityManager
-                am.killBackgroundProcesses(packageName)
+            val am = context.getSystemService(Activity.ACTIVITY_SERVICE) as ActivityManager
+            am.killBackgroundProcesses(packageName)
         }
+
+        /*fun isPluginModded(manifest: String) : Boolean? {
+
+            manifest.replace("s/.*versionName='\([^']*\).*//*\1/p", "")
+
+        }*/
 
 
         fun isAppInstalled(context: Context, packageName: String): Boolean {
@@ -65,12 +71,19 @@ class Utils {
         }
 
 
-        fun showFatalErrorDialog(context: Context, text: String) {
-            val builder: AlertDialog.Builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert)
-            } else {
-                AlertDialog.Builder(context)
+
+        fun isPluginItalian(md5: String) : Boolean {
+
+            Constants.MI_ITEMS.values.forEach {
+                if (md5.equals(it.latestItaMD5, true) || md5.equals(it.previousItaMD5, true)) return true
             }
+            return false
+        }
+
+
+
+        fun showFatalErrorDialog(context: Context, text: String) {
+            val builder: AlertDialog.Builder =  AlertDialog.Builder(context)
             builder.setTitle(context.resources.getString(R.string.error_title))
                     .setMessage(text)
                     .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
@@ -81,30 +94,43 @@ class Utils {
         }
 
 
-        fun getInstalledMiItems(parentDir: File): HashMap<Int, ArrayList<String>>? {
-            val inFiles = HashMap<Int, ArrayList<String>>()
+        fun getLatestInstalledMiItems(parentDir: File, extension: String): HashMap<Int, Int>? {
+            val inFiles = HashMap<Int, Int>()
             val files = parentDir.listFiles()
             if (files != null && files.isNotEmpty() ) {
                 for (file in files) {
                     if (file.isDirectory) {
-                        val map = getInstalledMiItems(file)
+                        val map = getLatestInstalledMiItems(file, extension)
                         if (map != null && map.isNotEmpty()) {
                             inFiles.putAll(map)
                         }
                     } else {
-                        if (file.name.endsWith(".apk")) {
-                            inFiles.put(file.parent.split("/").last().toInt(), arrayListOf(file.name.removeSuffix(".apk")))
+
+                        if (file.name.endsWith(extension)) {
+                            var folderName = file.parent.split("/").last().toInt()
+
+                            if (inFiles.containsKey(folderName)) {
+
+                                if (inFiles[folderName]!!.toInt() <= file.name.removeSuffix(extension).toInt()) {
+                                    inFiles.remove(folderName)
+                                    inFiles.put(folderName, file.name.removeSuffix(extension).toInt())
+                                }
+
+                            } else {
+                                inFiles.put(folderName, file.name.removeSuffix(extension).toInt())
+                            }
                         }
                     }
                 }
             }
 
+
             return inFiles
         }
 
 
-        enum class PluginLanguage {
-            CHINESE, ITALIAN
+        enum class Flag {
+            CHINESE, ITALIAN, OTHER
         }
 
     }
