@@ -11,6 +11,7 @@ import org.jsoup.select.Elements
 import org.loriz.mihomereplacer.core.Constants
 import org.loriz.mihomereplacer.core.models.MiItemEntry
 import org.loriz.mihomereplacer.core.models.MiItem
+import org.loriz.mihomereplacer.utils.Utils
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
@@ -24,7 +25,7 @@ import java.nio.charset.Charset
  * Created by loriz on 1/24/18.
  */
 
-open class UpdateAllTask(val context: Context) : AsyncTask<Void, Void, Elements?>() {
+open class UpdateDefinitionsTask(val context: Context) : AsyncTask<Void, Void, Elements?>() {
 
     val url : String = "http://xcape.esy.es/xiaomi/smarthome/PLUGIN.JSON"
 
@@ -34,7 +35,7 @@ open class UpdateAllTask(val context: Context) : AsyncTask<Void, Void, Elements?
     override fun doInBackground(vararg params: Void?): Elements? {
 
         //download plugin.json
-        if (downloadFile(url) != true) return null
+        if (Utils.downloadFile(context, url, context.filesDir.path + "/plugins.json") != true) return null
 
         if (parseJSON() != true) return null
 
@@ -105,51 +106,5 @@ open class UpdateAllTask(val context: Context) : AsyncTask<Void, Void, Elements?
 
         super.onPostExecute(result)
     }
-
-
-
-    private fun downloadFile(url : String) : Boolean {
-        var input: InputStream? = null
-        var output: OutputStream? = null
-        var connection: HttpURLConnection? = null
-        try {
-            val url = URL(url)
-            connection = url.openConnection() as HttpURLConnection
-            connection.connect()
-
-            // expect HTTP 200 OK, so we don't mistakenly save error report
-            // instead of the file
-            if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                return false
-            }
-
-            // download the file
-            input = connection.getInputStream()
-            output = FileOutputStream(context.filesDir.path + "/plugins.json")
-
-            val data = ByteArray(4096)
-            var count: Int = -1
-            while ({count = input!!.read(data); count}() != -1) {
-                output.write(data, 0, count)
-            }
-        } catch (e: Exception) {
-            return false
-        } finally {
-            try {
-                if (output != null)
-                    output.close()
-                if (input != null)
-                    input.close()
-            } catch (ignored: IOException) {
-                return false
-            }
-
-            if (connection != null)
-                connection.disconnect()
-        }
-        return true
-
-    }
-
 
 }

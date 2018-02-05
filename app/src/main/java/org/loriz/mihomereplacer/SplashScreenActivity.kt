@@ -19,7 +19,7 @@ import com.nostra13.universalimageloader.utils.StorageUtils
 import kotlinx.android.synthetic.main.activity_splashscreen.*
 import org.jsoup.select.Elements
 import org.loriz.mihomereplacer.core.Constants
-import org.loriz.mihomereplacer.update.UpdateAllTask
+import org.loriz.mihomereplacer.update.UpdateDefinitionsTask
 import org.loriz.mihomereplacer.utils.ImageUtils
 import org.loriz.mihomereplacer.utils.Utils
 
@@ -57,7 +57,7 @@ class SplashScreenActivity : AppCompatActivity() {
 
         Handler().postDelayed({
 
-            object : UpdateAllTask(this) {
+            object : UpdateDefinitionsTask(this) {
 
                 override fun onPostExecute(result: Elements?) {
 

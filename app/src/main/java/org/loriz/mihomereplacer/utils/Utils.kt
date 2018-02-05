@@ -9,7 +9,10 @@ import android.content.DialogInterface
 import android.support.v7.app.AlertDialog
 import org.loriz.mihomereplacer.SplashScreenActivity
 import org.loriz.mihomereplacer.core.Constants
-import java.io.File
+import java.io.*
+import java.net.HttpURLConnection
+import java.net.URL
+import java.util.zip.ZipFile
 
 
 /**
@@ -33,16 +36,14 @@ class Utils {
             return false
         }
 
+
+
         fun killProcess(context: Context, packageName: String) {
             val am = context.getSystemService(Activity.ACTIVITY_SERVICE) as ActivityManager
             am.killBackgroundProcesses(packageName)
         }
 
-        /*fun isPluginModded(manifest: String) : Boolean? {
 
-            manifest.replace("s/.*versionName='\([^']*\).*//*\1/p", "")
-
-        }*/
 
 
         fun isAppInstalled(context: Context, packageName: String): Boolean {
@@ -55,6 +56,7 @@ class Utils {
 
             return false
         }
+
 
 
         fun getMiHomeVersion(context: Context) : String? {
@@ -81,6 +83,101 @@ class Utils {
         }
 
 
+        fun composePluginUrl(itemId: Int?) : String {
+
+            return Constants.baseURL+(itemId ?: "")+Constants.remoteFileExtension
+
+        }
+
+        fun isValidZip(file: File): Boolean {
+            var zipfile: ZipFile? = null
+            try {
+                zipfile = ZipFile(file)
+                return true
+            } catch (e: IOException) {
+                return false
+            } finally {
+                try {
+                    if (zipfile != null) {
+                        zipfile.close()
+                        zipfile = null
+                    }
+                } catch (e: IOException) {
+                }
+
+            }
+        }
+
+        fun downloadFile(context: Context, url : String, path: String, md5: String? = null) : Boolean {
+            var input: InputStream? = null
+            var output: OutputStream? = null
+            var connection: HttpURLConnection? = null
+            try {
+                val url = URL(url)
+                connection = url.openConnection() as HttpURLConnection
+                connection.connect()
+
+                // expect HTTP 200 OK, so we don't mistakenly save error report
+                // instead of the file
+                if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                    return false
+                }
+
+                // download the file
+                input = connection.getInputStream()
+                output = FileOutputStream(path+".temp")
+
+                val data = ByteArray(8000)
+                var count: Int = -1
+                while ({count = input!!.read(data); count}() != -1) {
+                    output.write(data, 0, count)
+                }
+                var oldPlugin = File(path)
+                var newPlugin = File(path+".temp")
+
+                if (oldPlugin.exists()) {
+
+                    if (path.contains("plugin/")) {
+                        if (!Utils.isValidZip(newPlugin)) {
+                            return false
+                        }
+                        deleteOldInstalledeApk(path)
+                    }
+                    oldPlugin.delete()
+                }
+
+                newPlugin.renameTo(oldPlugin)
+            } catch (e: Exception) {
+                return false
+            } finally {
+                try {
+                    if (output != null)
+                        output.close()
+                    if (input != null)
+                        input.close()
+                } catch (ignored: IOException) {
+                    return false
+                }
+
+                if (connection != null)
+                    connection.disconnect()
+            }
+
+            return true
+
+        }
+
+
+
+        fun deleteOldInstalledeApk(path: String) {
+
+            var file = File(path.replace("download", "install").replace("plugin/", "plugin/mpk/").replace(".mpk", ".apk"))
+
+            if (file.exists()) file.delete()
+
+        }
+
+
 
         fun showFatalErrorDialog(context: Context, text: String) {
             val builder: AlertDialog.Builder =  AlertDialog.Builder(context)
@@ -92,6 +189,7 @@ class Utils {
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show()
         }
+
 
 
         fun getLatestInstalledMiItems(parentDir: File, extension: String): HashMap<Int, Int>? {
@@ -124,9 +222,9 @@ class Utils {
                 }
             }
 
-
             return inFiles
         }
+
 
 
         enum class Flag {

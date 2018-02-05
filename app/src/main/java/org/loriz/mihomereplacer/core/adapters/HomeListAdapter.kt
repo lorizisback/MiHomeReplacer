@@ -1,6 +1,10 @@
 package org.loriz.mihomereplacer.core.adapters
 
 import android.content.Context
+import android.content.DialogInterface
+import android.os.AsyncTask
+import android.provider.SyncStateContract
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +13,11 @@ import android.widget.TextView
 import org.loriz.mihomereplacer.R
 import org.loriz.mihomereplacer.utils.ImageUtils
 import android.view.LayoutInflater
+import org.loriz.mihomereplacer.SplashScreenActivity
+import org.loriz.mihomereplacer.core.Constants
+import org.loriz.mihomereplacer.core.listener.OnPluginDownloadListener
 import org.loriz.mihomereplacer.core.models.MiItem
+import org.loriz.mihomereplacer.update.UpdatePluginTask
 import org.loriz.mihomereplacer.utils.Utils
 
 
@@ -17,7 +25,7 @@ import org.loriz.mihomereplacer.utils.Utils
  * Created by loriz on 1/29/18.
  */
 
-class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair<Int, MiItem>>) : RecyclerView.Adapter<HomeListAdapter.MiViewHolder>() {
+class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair<Int, MiItem>>, val onPluginDownloadListener: OnPluginDownloadListener? = null) : RecyclerView.Adapter<HomeListAdapter.MiViewHolder>() {
 
     override fun getItemCount(): Int {
         return installedPlugins.size
@@ -56,10 +64,29 @@ class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair
 
             ImageUtils.display(context, item.second.imgLink, holder.image)
 
+            holder.container.setOnClickListener {
+
+                if (item.second.language != Utils.Companion.Flag.ITALIAN) {
+
+                    val builder: AlertDialog.Builder =  AlertDialog.Builder(context)
+                    builder.setMessage("Vuoi scaricare il plugin ${item.second.itemNumber} italiano?"  )
+                            .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
+                                object : UpdatePluginTask(context, item.second, onPluginDownloadListener){}.execute()
+                            })
+                            .setNegativeButton(android.R.string.no, DialogInterface.OnClickListener { dialog, which ->
+
+                            })
+                            .show()
+
+                }
+
+            }
+
         }
 
-
     }
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): MiViewHolder {
         val itemView = LayoutInflater.from(parent?.getContext())
@@ -67,6 +94,7 @@ class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair
 
         return MiViewHolder(itemView)
     }
+
 
 
     inner class MiViewHolder(view: View) : RecyclerView.ViewHolder(view) {

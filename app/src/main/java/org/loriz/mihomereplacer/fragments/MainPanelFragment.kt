@@ -14,7 +14,9 @@ import org.loriz.mihomereplacer.utils.Utils
 import java.io.File
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
+import android.widget.Toast
 import org.loriz.mihomereplacer.core.adapters.HomeListAdapter
+import org.loriz.mihomereplacer.core.listener.OnPluginDownloadListener
 import org.loriz.mihomereplacer.core.models.MiItem
 
 
@@ -24,8 +26,8 @@ import org.loriz.mihomereplacer.core.models.MiItem
 
 class MainPanelFragment : Fragment() {
 
-    val path = Environment.getExternalStorageDirectory().path + "/plugin/download"
-    val extension = ".mpk"
+    val path = Constants.pluginDownloadFolder
+    val extension = Constants.packageFileExtension
 
     var mAdapter : HomeListAdapter? = null
     var listInstalledPlugins: ArrayList<Pair<Int, MiItem>> = arrayListOf()
@@ -44,6 +46,37 @@ class MainPanelFragment : Fragment() {
             refreshList()
         }*/
 
+        refreshList()
+
+
+        mAdapter = HomeListAdapter(context, listInstalledPlugins, object : OnPluginDownloadListener {
+            override fun OnDownloadSuccess() {
+
+                refreshList()
+                mAdapter?.notifyDataSetChanged()
+                Toast.makeText(context, "Plugin aggiornato!", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun OnDownloadError() {
+                Toast.makeText(context, "Aggiornamento fallito!", Toast.LENGTH_SHORT).show()
+
+            }
+        })
+        val mLayoutManager = LinearLayoutManager(context)
+        recyclerview.setLayoutManager(mLayoutManager)
+        recyclerview.setItemAnimator(DefaultItemAnimator())
+        recyclerview.setAdapter(mAdapter)
+
+
+
+
+    }
+
+
+
+    private fun refreshList() {
+
+        listInstalledPlugins.clear()
         Utils.getLatestInstalledMiItems(File(path), extension)?.forEach {
             val key = it.key
 
@@ -66,22 +99,6 @@ class MainPanelFragment : Fragment() {
 
         }
 
-
-        mAdapter = HomeListAdapter(context, listInstalledPlugins)
-        val mLayoutManager = LinearLayoutManager(context)
-        recyclerview.setLayoutManager(mLayoutManager)
-        recyclerview.setItemAnimator(DefaultItemAnimator())
-        recyclerview.setAdapter(mAdapter)
-
-
-
-    }
-
-
-
-    private fun refreshList() {
-
-        mAdapter?.notifyDataSetChanged()
 
     }
 
