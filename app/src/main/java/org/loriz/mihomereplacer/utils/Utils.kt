@@ -109,7 +109,7 @@ class Utils {
         }
 
         fun downloadFile(context: Context, url : String, path: String, md5: String? = null) : Boolean {
-            var input: InputStream? = null
+            var input: DataInputStream? = null
             var output: OutputStream? = null
             var connection: HttpURLConnection? = null
             try {
@@ -124,14 +124,26 @@ class Utils {
                 }
 
                 // download the file
-                input = connection.getInputStream()
-                output = FileOutputStream(path+".temp")
+                input = DataInputStream(url.openStream())
+                output = DataOutputStream(FileOutputStream(path+".temp"))
 
-                val data = ByteArray(8000)
-                var count: Int = -1
+                val contentLength = connection.getContentLength()
+
+
+                val data = ByteArray(contentLength)
+
+                /*var count: Int = -1
                 while ({count = input!!.read(data); count}() != -1) {
                     output.write(data, 0, count)
-                }
+                }*/
+
+                input.readFully(data)
+                input.close()
+
+                output.write(data)
+                output.flush()
+                output.close()
+
                 var oldPlugin = File(path)
                 var newPlugin = File(path+".temp")
 
@@ -171,9 +183,18 @@ class Utils {
 
         fun deleteOldInstalledeApk(path: String) {
 
-            var file = File(path.replace("download", "install").replace("plugin/", "plugin/mpk/").replace(".mpk", ".apk"))
+            var file = File(path.replace("download", "install/mpk").replace(".mpk", ".apk")).parentFile
 
-            if (file.exists()) file.delete()
+            if (file.exists()) {
+
+                if (file.isDirectory) {
+                    file.listFiles().forEach {
+                        it.delete()
+                    }
+                }
+
+                file.delete()
+            }
 
         }
 

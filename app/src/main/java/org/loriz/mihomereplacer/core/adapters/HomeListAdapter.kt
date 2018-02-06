@@ -69,7 +69,7 @@ class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair
                 if (item.second.language != Utils.Companion.Flag.ITALIAN) {
 
                     val builder: AlertDialog.Builder =  AlertDialog.Builder(context)
-                    builder.setMessage("Vuoi scaricare il plugin ${item.second.itemNumber} italiano?"  )
+                    builder.setMessage("Vuoi scaricare il plugin ${item.second.installedVersion} italiano?"  )
                             .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
                                 object : UpdatePluginTask(context, item.second, onPluginDownloadListener){}.execute()
                             })
