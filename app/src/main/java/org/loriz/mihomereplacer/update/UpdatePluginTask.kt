@@ -5,7 +5,7 @@ import android.content.Context
 import android.os.AsyncTask
 import org.loriz.mihomereplacer.R
 import org.loriz.mihomereplacer.core.Constants
-import org.loriz.mihomereplacer.core.listener.OnPluginDownloadListener
+import org.loriz.mihomereplacer.core.listener.OnPluginManagementListener
 import org.loriz.mihomereplacer.core.models.MiItem
 import org.loriz.mihomereplacer.utils.Utils
 
@@ -13,7 +13,7 @@ import org.loriz.mihomereplacer.utils.Utils
  * Created by loriz on 2/5/18.
  */
 
-open class UpdatePluginTask(val context : Context, val item : MiItem, val onPluginDownloadListener: OnPluginDownloadListener?) : AsyncTask<Void, Void, Boolean>() {
+open class UpdatePluginTask(val context : Context, val item : MiItem, val onPluginManagementListener: OnPluginManagementListener?) : AsyncTask<Void, Void, Boolean>() {
 
     var mProgressDialog : ProgressDialog? = null
 
@@ -22,7 +22,7 @@ open class UpdatePluginTask(val context : Context, val item : MiItem, val onPlug
         Utils.killProcess(context, context.resources.getString(R.string.mi_home_package_name))
 
         mProgressDialog = ProgressDialog(context)
-        mProgressDialog?.setMessage("Aggiornamento in corso...")
+        mProgressDialog?.setMessage(context.getString(R.string.update_plugin_dialog_message))
         mProgressDialog?.setCancelable(false);
         mProgressDialog?.setIndeterminate(true);
         mProgressDialog?.show()
@@ -41,10 +41,10 @@ open class UpdatePluginTask(val context : Context, val item : MiItem, val onPlug
 
         if (result != null && result) {
 
-            onPluginDownloadListener?.OnDownloadSuccess()
+            onPluginManagementListener?.OnDownloadSuccess()
 
         } else {
-            onPluginDownloadListener?.OnDownloadError()
+            onPluginManagementListener?.OnDownloadError()
 
         }
 

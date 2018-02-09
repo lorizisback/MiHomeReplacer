@@ -20,5 +20,6 @@
     <string name="error_network_text">Errore di rete! Si prega di riprovare piu\' tardi.</string>
     <string name="error_permission_text">Questa applicazione non puo\' funzionare senza i permessi che hai negato!</string>
     <string name="error_title">Attenzione</string>
+    <string name="update_plugin_dialog_message">Aggiornamento in corso...</string>
 
 </resources>

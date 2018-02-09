@@ -2,8 +2,6 @@ package org.loriz.mihomereplacer.core.adapters
 
 import android.content.Context
 import android.content.DialogInterface
-import android.os.AsyncTask
-import android.provider.SyncStateContract
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -13,9 +11,7 @@ import android.widget.TextView
 import org.loriz.mihomereplacer.R
 import org.loriz.mihomereplacer.utils.ImageUtils
 import android.view.LayoutInflater
-import org.loriz.mihomereplacer.SplashScreenActivity
-import org.loriz.mihomereplacer.core.Constants
-import org.loriz.mihomereplacer.core.listener.OnPluginDownloadListener
+import org.loriz.mihomereplacer.core.listener.OnPluginManagementListener
 import org.loriz.mihomereplacer.core.models.MiItem
 import org.loriz.mihomereplacer.update.UpdatePluginTask
 import org.loriz.mihomereplacer.utils.Utils
@@ -25,7 +21,7 @@ import org.loriz.mihomereplacer.utils.Utils
  * Created by loriz on 1/29/18.
  */
 
-class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair<Int, MiItem>>, val onPluginDownloadListener: OnPluginDownloadListener? = null) : RecyclerView.Adapter<HomeListAdapter.MiViewHolder>() {
+class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair<Int, MiItem>>, val onPluginManagementListener: OnPluginManagementListener? = null) : RecyclerView.Adapter<HomeListAdapter.MiViewHolder>() {
 
     override fun getItemCount(): Int {
         return installedPlugins.size
@@ -66,24 +62,36 @@ class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair
 
             holder.container.setOnClickListener {
 
-                if (item.second.language != Utils.Companion.Flag.ITALIAN) {
+                if (item.second.language != Utils.Companion.Flag.ITALIAN && (item.second.installedVersion as Int <= item.second.latestVersion as Int)) {
 
                     val builder: AlertDialog.Builder =  AlertDialog.Builder(context)
                     builder.setMessage("Vuoi scaricare il plugin ${item.second.installedVersion} italiano?"  )
                             .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
-                                object : UpdatePluginTask(context, item.second, onPluginDownloadListener){}.execute()
+                                object : UpdatePluginTask(context, item.second, onPluginManagementListener){}.execute()
                             })
                             .setNegativeButton(android.R.string.no, DialogInterface.OnClickListener { dialog, which ->
 
                             })
                             .show()
 
+                } else if (item.second.language == Utils.Companion.Flag.ITALIAN) {
+                    val builder: AlertDialog.Builder =  AlertDialog.Builder(context)
+                    builder.setMessage("Vuoi cancellare il plugin?")
+                            .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
+                                if (Utils.cleanUp(item.second.installedVersion as Int)) {
+
+                                    onPluginManagementListener?.OnDeleteSuccess()
+                                } else {
+                                    onPluginManagementListener?.OnDeleteError()
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, DialogInterface.OnClickListener { dialog, which ->
+
+                            })
+                            .show()
                 }
-
             }
-
         }
-
     }
 
 

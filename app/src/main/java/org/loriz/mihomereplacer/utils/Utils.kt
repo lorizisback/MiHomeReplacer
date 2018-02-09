@@ -153,7 +153,7 @@ class Utils {
                         if (!Utils.isValidZip(newPlugin)) {
                             return false
                         }
-                        deleteOldInstalledeApk(path)
+                        deleteOldInstalledApk(path)
                     }
                     oldPlugin.delete()
                 }
@@ -181,7 +181,7 @@ class Utils {
 
 
 
-        fun deleteOldInstalledeApk(path: String) {
+        fun deleteOldInstalledApk(path: String) : Boolean {
 
             var file = File(path.replace("download", "install/mpk").replace(".mpk", ".apk")).parentFile
 
@@ -194,10 +194,34 @@ class Utils {
                 }
 
                 file.delete()
+                return true
             }
+            return false
+        }
+
+
+
+        fun deleteOldInstalledApk(item: Int) : Boolean {
+
+            return deleteOldInstalledApk(Constants.pluginDownloadFolder + "/" + getFolderByInstalledItemId(item) + "/" + item + Constants.packageFileExtension)
 
         }
 
+
+
+        fun deleteInstalledMPK(item : Int) : Boolean {
+            return File(Constants.pluginDownloadFolder + "/" + getFolderByInstalledItemId(item) + "/" + item + Constants.packageFileExtension).delete()
+        }
+
+
+        fun getFolderByInstalledItemId(item: Int) : Int? {
+            return Constants.MI_ITEMS.entries.find { it.value.installedVersion == item }?.value?.folderNumber
+        }
+
+
+        fun cleanUp(item: Int) : Boolean{
+            return deleteInstalledMPK(item) || deleteOldInstalledApk(item)
+        }
 
 
         fun showFatalErrorDialog(context: Context, text: String) {

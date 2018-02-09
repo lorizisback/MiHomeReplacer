@@ -2,7 +2,6 @@ package org.loriz.mihomereplacer.fragments
 
 import android.support.v4.app.Fragment
 import android.os.Bundle
-import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,7 @@ import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.widget.Toast
 import org.loriz.mihomereplacer.core.adapters.HomeListAdapter
-import org.loriz.mihomereplacer.core.listener.OnPluginDownloadListener
+import org.loriz.mihomereplacer.core.listener.OnPluginManagementListener
 import org.loriz.mihomereplacer.core.models.MiItem
 
 
@@ -49,7 +48,7 @@ class MainPanelFragment : Fragment() {
         refreshList()
 
 
-        mAdapter = HomeListAdapter(context, listInstalledPlugins, object : OnPluginDownloadListener {
+        mAdapter = HomeListAdapter(context, listInstalledPlugins, object : OnPluginManagementListener {
             override fun OnDownloadSuccess() {
 
                 refreshList()
@@ -60,6 +59,18 @@ class MainPanelFragment : Fragment() {
             override fun OnDownloadError() {
                 Toast.makeText(context, "Aggiornamento fallito!", Toast.LENGTH_SHORT).show()
 
+            }
+
+            override fun OnDeleteError() {
+                Toast.makeText(context, "Cancellazione fallita!", Toast.LENGTH_SHORT).show()
+
+            }
+
+            override fun OnDeleteSuccess() {
+                refreshList()
+                mAdapter?.notifyDataSetChanged()
+                Utils.killProcess(context, context.resources.getString(R.string.mi_home_package_name))
+                Toast.makeText(context, "Cancellazione completata!", Toast.LENGTH_SHORT).show()
             }
         })
         val mLayoutManager = LinearLayoutManager(context)
