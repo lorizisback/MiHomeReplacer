@@ -1,4 +1,4 @@
-package org.loriz.mihomereplacer
+package org.loriz.mireplacer
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4

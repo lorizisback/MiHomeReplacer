@@ -1,6 +1,6 @@
-package org.loriz.mihomereplacer.core.models
+package org.loriz.mireplacer.core.models
 
-import org.loriz.mihomereplacer.utils.Utils
+import org.loriz.mireplacer.utils.Utils
 
 /**
  * Created by loriz on 1/24/18.

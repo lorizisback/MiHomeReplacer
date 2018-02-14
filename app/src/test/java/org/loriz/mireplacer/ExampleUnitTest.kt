@@ -1,4 +1,4 @@
-package org.loriz.mihomereplacer
+package org.loriz.mireplacer
 
 import org.junit.Test
 

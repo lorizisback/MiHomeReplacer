@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.loriz.mihomereplacer">
+    package="org.loriz.mireplacer">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -18,7 +18,7 @@
         android:theme="@style/AppTheme"
         >
 
-        <activity android:name=".SplashScreenActivity"
+        <activity android:name="org.loriz.mireplacer.SplashScreenActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:screenOrientation="portrait">
 
@@ -30,7 +30,7 @@
         </activity>
 
 
-        <activity android:name=".MainActivity"
+        <activity android:name="org.loriz.mireplacer.MainActivity"
             android:screenOrientation="portrait"/>
 
     </application>

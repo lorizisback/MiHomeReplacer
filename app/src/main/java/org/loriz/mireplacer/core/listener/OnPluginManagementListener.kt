@@ -1,4 +1,4 @@
-package org.loriz.mihomereplacer.core.listener
+package org.loriz.mireplacer.core.listener
 
 /**
  * Created by loriz on 2/5/18.

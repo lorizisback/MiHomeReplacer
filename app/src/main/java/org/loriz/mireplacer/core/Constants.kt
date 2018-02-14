@@ -1,7 +1,7 @@
-package org.loriz.mihomereplacer.core
+package org.loriz.mireplacer.core
 
 import android.os.Environment
-import org.loriz.mihomereplacer.core.models.MiItem
+import org.loriz.mireplacer.core.models.MiItem
 
 /**
  * Created by loriz on 1/24/18.

@@ -1,4 +1,4 @@
-package org.loriz.mihomereplacer.utils;
+package org.loriz.mireplacer.utils;
 
 import android.text.TextUtils;
 import android.util.Log;

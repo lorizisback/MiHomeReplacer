@@ -1,4 +1,4 @@
-package org.loriz.mihomereplacer.core.adapters
+package org.loriz.mireplacer.core.adapters
 
 import android.content.Context
 import android.content.DialogInterface
@@ -8,13 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import org.loriz.mihomereplacer.R
-import org.loriz.mihomereplacer.utils.ImageUtils
+import org.loriz.mireplacer.R
+import org.loriz.mireplacer.utils.ImageUtils
 import android.view.LayoutInflater
-import org.loriz.mihomereplacer.core.listener.OnPluginManagementListener
-import org.loriz.mihomereplacer.core.models.MiItem
-import org.loriz.mihomereplacer.update.UpdatePluginTask
-import org.loriz.mihomereplacer.utils.Utils
+import org.loriz.mireplacer.core.listener.OnPluginManagementListener
+import org.loriz.mireplacer.core.models.MiItem
+import org.loriz.mireplacer.update.UpdatePluginTask
+import org.loriz.mireplacer.utils.Utils
 
 
 /**

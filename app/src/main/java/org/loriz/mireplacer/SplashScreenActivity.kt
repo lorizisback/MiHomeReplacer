@@ -1,4 +1,4 @@
-package org.loriz.mihomereplacer
+package org.loriz.mireplacer
 
 import android.Manifest
 import android.content.Intent
@@ -18,10 +18,10 @@ import com.nostra13.universalimageloader.core.download.BaseImageDownloader
 import com.nostra13.universalimageloader.utils.StorageUtils
 import kotlinx.android.synthetic.main.activity_splashscreen.*
 import org.jsoup.select.Elements
-import org.loriz.mihomereplacer.core.Constants
-import org.loriz.mihomereplacer.update.UpdateDefinitionsTask
-import org.loriz.mihomereplacer.utils.ImageUtils
-import org.loriz.mihomereplacer.utils.Utils
+import org.loriz.mireplacer.core.Constants
+import org.loriz.mireplacer.update.UpdateDefinitionsTask
+import org.loriz.mireplacer.utils.ImageUtils
+import org.loriz.mireplacer.utils.Utils
 
 
 /**

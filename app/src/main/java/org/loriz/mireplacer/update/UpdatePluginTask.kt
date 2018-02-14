@@ -1,13 +1,13 @@
-package org.loriz.mihomereplacer.update
+package org.loriz.mireplacer.update
 
 import android.app.ProgressDialog
 import android.content.Context
 import android.os.AsyncTask
-import org.loriz.mihomereplacer.R
-import org.loriz.mihomereplacer.core.Constants
-import org.loriz.mihomereplacer.core.listener.OnPluginManagementListener
-import org.loriz.mihomereplacer.core.models.MiItem
-import org.loriz.mihomereplacer.utils.Utils
+import org.loriz.mireplacer.R
+import org.loriz.mireplacer.core.Constants
+import org.loriz.mireplacer.core.listener.OnPluginManagementListener
+import org.loriz.mireplacer.core.models.MiItem
+import org.loriz.mireplacer.utils.Utils
 
 /**
  * Created by loriz on 2/5/18.

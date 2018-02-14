@@ -1,4 +1,4 @@
-package org.loriz.mihomereplacer.fragments
+package org.loriz.mireplacer.fragments
 
 import android.support.v4.app.Fragment
 import android.os.Bundle
@@ -6,17 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_main_panel.*
-import org.loriz.mihomereplacer.R
-import org.loriz.mihomereplacer.core.Constants
-import org.loriz.mihomereplacer.utils.MD5
-import org.loriz.mihomereplacer.utils.Utils
+import org.loriz.mireplacer.R
+import org.loriz.mireplacer.core.Constants
+import org.loriz.mireplacer.utils.MD5
+import org.loriz.mireplacer.utils.Utils
 import java.io.File
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.widget.Toast
-import org.loriz.mihomereplacer.core.adapters.HomeListAdapter
-import org.loriz.mihomereplacer.core.listener.OnPluginManagementListener
-import org.loriz.mihomereplacer.core.models.MiItem
+import org.loriz.mireplacer.core.adapters.HomeListAdapter
+import org.loriz.mireplacer.core.listener.OnPluginManagementListener
+import org.loriz.mireplacer.core.models.MiItem
 
 
 /**

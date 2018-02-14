@@ -1,4 +1,4 @@
-package org.loriz.mihomereplacer.update
+package org.loriz.mireplacer.update
 
 import android.content.Context
 import android.os.AsyncTask
@@ -8,16 +8,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.jsoup.Jsoup
 import org.jsoup.select.Elements
-import org.loriz.mihomereplacer.core.Constants
-import org.loriz.mihomereplacer.core.models.MiItemEntry
-import org.loriz.mihomereplacer.core.models.MiItem
-import org.loriz.mihomereplacer.utils.Utils
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
-import java.net.HttpURLConnection
-import java.net.URL
+import org.loriz.mireplacer.core.Constants
+import org.loriz.mireplacer.core.models.MiItemEntry
+import org.loriz.mireplacer.core.models.MiItem
+import org.loriz.mireplacer.utils.Utils
 import java.nio.charset.Charset
 
 

@@ -1,17 +1,19 @@
-package org.loriz.mihomereplacer.utils
+package org.loriz.mireplacer.utils
 
 import android.app.ActivityManager
 import android.content.Context
 import android.app.Activity
 import android.content.pm.PackageManager
-import org.loriz.mihomereplacer.R
+import org.loriz.mireplacer.R
 import android.content.DialogInterface
 import android.support.v7.app.AlertDialog
-import org.loriz.mihomereplacer.SplashScreenActivity
-import org.loriz.mihomereplacer.core.Constants
+import android.util.Log
+import org.loriz.mireplacer.SplashScreenActivity
+import org.loriz.mireplacer.core.Constants
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.zip.ZipException
 import java.util.zip.ZipFile
 
 
@@ -95,12 +97,15 @@ class Utils {
                 zipfile = ZipFile(file)
                 return true
             } catch (e: IOException) {
+                Log.d("MiReplacer", "File problems!")
+                return false }
+            catch (e: ZipException) {
+                Log.d("MiReplacer", "Zip is corrupt!")
                 return false
             } finally {
                 try {
                     if (zipfile != null) {
                         zipfile.close()
-                        zipfile = null
                     }
                 } catch (e: IOException) {
                 }
@@ -129,7 +134,6 @@ class Utils {
 
                 val contentLength = connection.getContentLength()
 
-
                 val data = ByteArray(contentLength)
 
                 /*var count: Int = -1
@@ -147,10 +151,13 @@ class Utils {
                 var oldPlugin = File(path)
                 var newPlugin = File(path+".temp")
 
+                Log.d("MiReplacer", "MD5 = "+MD5.calculateMD5(newPlugin))
+
                 if (oldPlugin.exists()) {
 
                     if (path.contains("plugin/")) {
                         if (!Utils.isValidZip(newPlugin)) {
+                            newPlugin.delete()
                             return false
                         }
                         deleteOldInstalledApk(path)
@@ -159,24 +166,13 @@ class Utils {
                 }
 
                 newPlugin.renameTo(oldPlugin)
+
+
+
             } catch (e: Exception) {
                 return false
-            } finally {
-                try {
-                    if (output != null)
-                        output.close()
-                    if (input != null)
-                        input.close()
-                } catch (ignored: IOException) {
-                    return false
-                }
-
-                if (connection != null)
-                    connection.disconnect()
             }
-
             return true
-
         }
 
 

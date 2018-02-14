@@ -1,4 +1,4 @@
-package org.loriz.mihomereplacer.core.models
+package org.loriz.mireplacer.core.models
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty

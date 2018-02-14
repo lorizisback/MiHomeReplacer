@@ -1,4 +1,4 @@
-package org.loriz.mihomereplacer
+package org.loriz.mireplacer
 
 import android.content.Intent
 import android.net.Uri
@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import kotlinx.android.synthetic.main.top_panel.*
-import org.loriz.mihomereplacer.fragments.MainPanelFragment
-import org.loriz.mihomereplacer.utils.Utils
+import org.loriz.mireplacer.fragments.MainPanelFragment
+import org.loriz.mireplacer.utils.Utils
 
 /**
  * Created by loriz on 1/24/18.
