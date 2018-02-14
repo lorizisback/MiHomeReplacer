@@ -85,11 +85,14 @@ class Utils {
         }
 
 
+
         fun composePluginUrl(itemId: Int?) : String {
 
             return Constants.baseURL+(itemId ?: "")+Constants.remoteFileExtension
 
         }
+
+
 
         fun isValidZip(file: File): Boolean {
             var zipfile: ZipFile? = null
@@ -179,9 +182,9 @@ class Utils {
 
         fun deleteOldInstalledApk(path: String) : Boolean {
 
-            var file = File(path.replace("download", "install/mpk").replace(".mpk", ".apk")).parentFile
+            var file = File(path.replace("download", "install/mpk").replace(".mpk", ".apk")).takeIf { it.exists() }?.parentFile
 
-            if (file.exists()) {
+            if (file != null && file.exists()) {
 
                 if (file.isDirectory) {
                     file.listFiles().forEach {

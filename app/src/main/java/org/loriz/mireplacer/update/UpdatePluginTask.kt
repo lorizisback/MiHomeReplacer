@@ -33,7 +33,13 @@ open class UpdatePluginTask(val context : Context, val item : MiItem, val onPlug
 
     override fun doInBackground(vararg params: Void?): Boolean? {
 
-        return Utils.downloadFile(context, Utils.composePluginUrl(item.installedVersion), Constants.pluginDownloadFolder + "/" + item.folderNumber + "/" + item.installedVersion + Constants.packageFileExtension)
+        var result = false
+        while (result == false) {
+
+            result = Utils.downloadFile(context, Utils.composePluginUrl(item.installedVersion), Constants.pluginDownloadFolder + "/" + item.folderNumber + "/" + item.installedVersion + Constants.packageFileExtension)
+        }
+
+        return true
 
     }
 
