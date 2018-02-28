@@ -34,6 +34,14 @@
                 android:src="@drawable/mi_home_stock"
                 android:visibility="gone"/>
 
+            <ImageView
+                android:id="@+id/top_panel_no_mihome_icon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/no_mi_home"
+                android:visibility="gone"/>
+
         </RelativeLayout>
 
         <TextView

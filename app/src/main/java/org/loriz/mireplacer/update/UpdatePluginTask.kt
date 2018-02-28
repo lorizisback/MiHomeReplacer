@@ -13,7 +13,7 @@ import org.loriz.mireplacer.utils.Utils
  * Created by loriz on 2/5/18.
  */
 
-open class UpdatePluginTask(val context : Context, val item : MiItem, val onPluginManagementListener: OnPluginManagementListener?) : AsyncTask<Void, Void, Boolean>() {
+open class UpdatePluginTask(val context : Context, val item : MiItem, val onPluginManagementListener: OnPluginManagementListener?, val overriddenVersion: Int? = null) : AsyncTask<Void, Void, Boolean>() {
 
     var mProgressDialog : ProgressDialog? = null
 
@@ -34,12 +34,13 @@ open class UpdatePluginTask(val context : Context, val item : MiItem, val onPlug
     override fun doInBackground(vararg params: Void?): Boolean? {
 
         var result = false
-        while (result == false) {
-
-            result = Utils.downloadFile(context, Utils.composePluginUrl(item.installedVersion), Constants.pluginDownloadFolder + "/" + item.folderNumber + "/" + item.installedVersion + Constants.packageFileExtension)
+        var counter = 0
+        while (result == false && counter<5) {
+            result = Utils.downloadFile(context, Utils.composePluginUrl(overriddenVersion ?: item.installedVersion), Constants.pluginDownloadFolder + "/" + item.folderNumber + "/" + item.installedVersion + Constants.packageFileExtension)
+            counter++
         }
 
-        return true
+        return result
 
     }
 

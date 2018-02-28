@@ -182,9 +182,13 @@ class Utils {
 
         fun deleteOldInstalledApk(path: String) : Boolean {
 
-            var file = File(path.replace("download", "install/mpk").replace(".mpk", ".apk")).takeIf { it.exists() }?.parentFile
+            var newPath = path.replace("download", "install/mpk")
 
-            if (file != null && file.exists()) {
+            newPath = newPath.substring(0, newPath.lastIndexOf("/")+1)
+
+            var file = File(newPath)
+
+            if (file != null && (file.exists() or file.isDirectory)) {
 
                 if (file.isDirectory) {
                     file.listFiles().forEach {
@@ -219,7 +223,7 @@ class Utils {
 
 
         fun cleanUp(item: Int) : Boolean{
-            return deleteInstalledMPK(item) || deleteOldInstalledApk(item)
+            return deleteInstalledMPK(item) or deleteOldInstalledApk(item)
         }
 
 

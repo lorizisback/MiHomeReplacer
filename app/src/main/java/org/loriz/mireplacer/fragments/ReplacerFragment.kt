@@ -23,7 +23,7 @@ import org.loriz.mireplacer.core.models.MiItem
  * Created by loriz on 1/25/18.
  */
 
-class MainPanelFragment : Fragment() {
+class ReplacerFragment : Fragment() {
 
     val path = Constants.pluginDownloadFolder
     val extension = Constants.packageFileExtension
@@ -77,8 +77,6 @@ class MainPanelFragment : Fragment() {
         recyclerview.setLayoutManager(mLayoutManager)
         recyclerview.setItemAnimator(DefaultItemAnimator())
         recyclerview.setAdapter(mAdapter)
-
-
 
 
     }
