@@ -36,7 +36,7 @@ open class UpdatePluginTask(val context : Context, val item : MiItem, val onPlug
         var result = false
         var counter = 0
         while (result == false && counter<5) {
-            result = Utils.downloadFile(context, Utils.composePluginUrl(overriddenVersion ?: item.installedVersion), Constants.pluginDownloadFolder + "/" + item.folderNumber + "/" + item.installedVersion + Constants.packageFileExtension)
+            result = Utils.downloadFile(context, Utils.composePluginUrl(overriddenVersion ?: item.installedVersion), Constants.pluginDownloadFolder + "/" + item.folderNumber + "/" + item.installedVersion + Constants.packageFileExtension, useBest = (overriddenVersion != null))
             counter++
         }
 

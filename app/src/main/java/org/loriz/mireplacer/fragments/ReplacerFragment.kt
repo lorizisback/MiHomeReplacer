@@ -95,7 +95,11 @@ class ReplacerFragment : Fragment() {
                 item.installedVersion = it.value.toInt()
                 item.md5 = MD5.calculateMD5(File(path + "/" + key + "/" + it.value + extension))
                 item.language = if (item.md5 != null && Utils.isPluginItalian(item.md5 as String)) {
-                    Utils.Companion.Flag.ITALIAN
+                    if (File(path + "/" + key + "/" + it.value + extension + Constants.useBestFileExtension).exists()) {
+                        Utils.Companion.Flag.USEBEST
+                    } else {
+                        Utils.Companion.Flag.ITALIAN
+                    }
                 } else if (item.installedVersion as Int >= item.previousVersion as Int) {
                     Utils.Companion.Flag.CHINESE
                 } else {

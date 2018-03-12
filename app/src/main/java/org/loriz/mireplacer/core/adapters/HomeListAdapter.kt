@@ -48,6 +48,14 @@ class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair
             if (item.second.language != null) {
                 when (item.second.language) {
 
+                    Utils.Companion.Flag.USEBEST -> {
+                        holder.flag.setImageDrawable(context.resources.getDrawable(R.drawable.use_best_flag))
+                        if (item.second.installedVersion as Int == item.second.latestVersion as Int) {
+                            // usebest plugin, but the correct one is now available
+                            holder.latestVersion.text = context.resources.getString(R.string.miitem_update_available_label)
+                        }
+                    }
+
                     Utils.Companion.Flag.CHINESE -> {
                         holder.flag.setImageDrawable(context.resources.getDrawable(R.drawable.chinese_flag))
                         if (item.second.installedVersion as Int > item.second.latestVersion as Int) {
@@ -76,10 +84,12 @@ class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair
 
             ImageUtils.display(context, item.second.imgLink, holder.image)
 
+
+
             holder.container.setOnClickListener {
 
-                if (item.second.language != Utils.Companion.Flag.ITALIAN) {
-                    //if installed plugin is not italian...
+                if (item.second.language == Utils.Companion.Flag.CHINESE || item.second.language == Utils.Companion.Flag.OTHER) {
+                    //if installed plugin is not either chinese or unknown (too old)...
 
                     if (item.second.installedVersion as Int <= item.second.latestVersion as Int) {
                         //...and installed version is less than latest translated version
@@ -130,6 +140,40 @@ class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair
 
                             })
                             .show()
+                } else if (item.second.language == Utils.Companion.Flag.USEBEST) {
+
+                    if (item.second.installedVersion as Int > item.second.latestVersion as Int) {
+                        //...and installed version is greater than latest translated version
+                        // delete installed plugin
+                        val builder: AlertDialog.Builder =  AlertDialog.Builder(context)
+                        builder.setMessage("Vuoi cancellare il plugin?")
+                                .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
+                                    if (Utils.cleanUp(item.second.installedVersion as Int)) {
+
+                                        onPluginManagementListener?.OnDeleteSuccess()
+                                    } else {
+                                        onPluginManagementListener?.OnDeleteError()
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, DialogInterface.OnClickListener { dialog, which ->
+
+                                })
+                                .show()
+                    } else {
+                        //...and installed version is less or equal than latest translated plugin
+                        // prompt to download correct (not use best) plugin
+
+                        val builder: AlertDialog.Builder =  AlertDialog.Builder(context)
+                        builder.setMessage("E' ora disponibile il plugin ${item.second.installedVersion} in italiano. \nVuoi scaricarlo?"  )
+                                .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
+                                     object : UpdatePluginTask(context, item.second, onPluginManagementListener){}.execute()
+                                })
+                                .setNegativeButton(android.R.string.no, DialogInterface.OnClickListener { dialog, which ->
+
+                                })
+                                .show()
+                    }
+
                 } else {
                     Toast.makeText(context, context.resources.getString(R.string.miitem_no_action_available), Toast.LENGTH_SHORT).show()
                 }

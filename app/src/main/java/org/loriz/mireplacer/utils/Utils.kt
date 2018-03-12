@@ -116,7 +116,7 @@ class Utils {
             }
         }
 
-        fun downloadFile(context: Context, url : String, path: String, md5: String? = null) : Boolean {
+        fun downloadFile(context: Context, url : String, path: String, md5: String? = null, useBest: Boolean = false) : Boolean {
             var input: DataInputStream? = null
             var output: OutputStream? = null
             var connection: HttpURLConnection? = null
@@ -170,6 +170,13 @@ class Utils {
 
                 newPlugin.renameTo(oldPlugin)
 
+                if (useBest) {
+                    File(path + Constants.useBestFileExtension).createNewFile()
+                } else {
+                    if (File(path + Constants.useBestFileExtension).exists())  {
+                        File(path + Constants.useBestFileExtension).delete()
+                    }
+                }
 
 
             } catch (e: Exception) {
@@ -213,7 +220,10 @@ class Utils {
 
 
         fun deleteInstalledMPK(item : Int) : Boolean {
-            return File(Constants.pluginDownloadFolder + "/" + getFolderByInstalledItemId(item) + "/" + item + Constants.packageFileExtension).delete()
+            val result = (File(Constants.pluginDownloadFolder + "/" + getFolderByInstalledItemId(item) + "/" + item + Constants.packageFileExtension).delete()
+                    or
+                    File(Constants.pluginDownloadFolder + "/" + getFolderByInstalledItemId(item) + "/" + item + Constants.useBestFileExtension).delete())
+            return result
         }
 
 
@@ -276,7 +286,7 @@ class Utils {
 
 
         enum class Flag {
-            CHINESE, ITALIAN, OTHER
+            CHINESE, ITALIAN, OTHER, USEBEST
         }
 
     }

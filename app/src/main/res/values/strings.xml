@@ -15,6 +15,7 @@
     <string name="miitem_installed_version_label">Installata: </string>
     <string name="miitem_latest_version_label">Disponibile: </string>
     <string name="miitem_translation_available_label">Traduzione disponibile!</string>
+    <string name="miitem_update_available_label">Aggiornamento disponibile!</string>
     <string name="telegram_link">https://t.me/xcape4xiaomi</string>
     <string name="miitem_no_action_available">Nessuna azione disponibile per questo plugin</string>
 
