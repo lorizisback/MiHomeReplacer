@@ -1,10 +1,9 @@
 package org.loriz.mireplacer.fragments
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.support.v4.app.Fragment
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_main_panel.*
 import org.loriz.mireplacer.R
 import org.loriz.mireplacer.core.Constants
@@ -12,7 +11,9 @@ import org.loriz.mireplacer.utils.MD5
 import org.loriz.mireplacer.utils.Utils
 import java.io.File
 import android.support.v7.widget.DefaultItemAnimator
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
+import android.view.*
 import android.widget.Toast
 import org.loriz.mireplacer.core.adapters.HomeListAdapter
 import org.loriz.mireplacer.core.listener.OnPluginManagementListener
@@ -25,15 +26,63 @@ import org.loriz.mireplacer.core.models.MiItem
 
 class ReplacerFragment : Fragment() {
 
+    lateinit var prefs : SharedPreferences
+    var altLayoutEnabled : Boolean = false
+
     val path = Constants.pluginDownloadFolder
     val extension = Constants.packageFileExtension
-
     var mAdapter : HomeListAdapter? = null
     var listInstalledPlugins: ArrayList<Pair<Int, MiItem>> = arrayListOf()
 
+    val pluginManagerListener = object : OnPluginManagementListener {
+        override fun OnDownloadSuccess() {
+
+            refreshList()
+            mAdapter?.notifyDataSetChanged()
+            Toast.makeText(context, "Plugin aggiornato!", Toast.LENGTH_SHORT).show()
+        }
+
+        override fun OnDownloadError() {
+            Toast.makeText(context, "Aggiornamento fallito!", Toast.LENGTH_SHORT).show()
+
+        }
+
+        override fun OnDeleteError() {
+            Toast.makeText(context, "Cancellazione fallita!", Toast.LENGTH_SHORT).show()
+
+        }
+
+        override fun OnDeleteSuccess() {
+            refreshList()
+            mAdapter?.notifyDataSetChanged()
+            Utils.killProcess(context, context.resources.getString(R.string.mi_home_package_name))
+            Toast.makeText(context, "Cancellazione completata!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater?.inflate(R.menu.replacer_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+
+        return when (item?.itemId) {
+            R.id.replacer_menu_change_layout -> {cycleLayout(); true}
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
-
+        prefs = activity.getPreferences(Context.MODE_PRIVATE)
+        altLayoutEnabled = when (prefs.getString(Constants.sharedPrefsLayoutMode, Constants.ReplacerLayouts.FULL.toString())) {
+            Constants.ReplacerLayouts.FULL.toString() -> false
+            else -> true
+        }
+        setHasOptionsMenu(true);
         return inflater!!.inflate(R.layout.fragment_main_panel, container, false)
     }
 
@@ -41,44 +90,48 @@ class ReplacerFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        /*swiperefresh.setOnRefreshListener {
-            refreshList()
-        }*/
-
         refreshList()
+        setupContainer()
+    }
 
 
-        mAdapter = HomeListAdapter(context, listInstalledPlugins, object : OnPluginManagementListener {
-            override fun OnDownloadSuccess() {
 
-                refreshList()
-                mAdapter?.notifyDataSetChanged()
-                Toast.makeText(context, "Plugin aggiornato!", Toast.LENGTH_SHORT).show()
-            }
+    fun setupContainer() {
+        recyclerview.adapter = null
+        recyclerview.layoutManager = null
 
-            override fun OnDownloadError() {
-                Toast.makeText(context, "Aggiornamento fallito!", Toast.LENGTH_SHORT).show()
+        mAdapter = HomeListAdapter(context, listInstalledPlugins, pluginManagerListener)
 
-            }
-
-            override fun OnDeleteError() {
-                Toast.makeText(context, "Cancellazione fallita!", Toast.LENGTH_SHORT).show()
-
-            }
-
-            override fun OnDeleteSuccess() {
-                refreshList()
-                mAdapter?.notifyDataSetChanged()
-                Utils.killProcess(context, context.resources.getString(R.string.mi_home_package_name))
-                Toast.makeText(context, "Cancellazione completata!", Toast.LENGTH_SHORT).show()
-            }
-        })
-        val mLayoutManager = LinearLayoutManager(context)
+        val mLayoutManager = if (altLayoutEnabled) {
+            GridLayoutManager(context, 2)
+        } else {
+            LinearLayoutManager(context)
+        }
         recyclerview.setLayoutManager(mLayoutManager)
         recyclerview.setItemAnimator(DefaultItemAnimator())
         recyclerview.setAdapter(mAdapter)
+    }
 
 
+
+    fun cycleLayout() {
+
+        if (prefs.contains(Constants.sharedPrefsLayoutMode)) {
+            when (prefs.getString(Constants.sharedPrefsLayoutMode, Constants.ReplacerLayouts.FULL.toString())) {
+                Constants.ReplacerLayouts.FULL.toString() -> {
+                    prefs.edit().putString(Constants.sharedPrefsLayoutMode, Constants.ReplacerLayouts.COMPACT.toString()).apply()
+                    altLayoutEnabled = true
+                }
+                else -> {
+                    prefs.edit().putString(Constants.sharedPrefsLayoutMode, Constants.ReplacerLayouts.FULL.toString()).apply()
+                    altLayoutEnabled = false
+                }
+            }
+        } else {
+            prefs.edit().putString(Constants.sharedPrefsLayoutMode, Constants.ReplacerLayouts.FULL.toString()).apply()
+        }
+
+        setupContainer()
     }
 
 

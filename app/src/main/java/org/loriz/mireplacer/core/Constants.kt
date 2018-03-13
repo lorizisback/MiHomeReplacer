@@ -20,6 +20,10 @@ class Constants {
         var useBestFileExtension = ".marker"
         var pluginDownloadFolder = Environment.getExternalStorageDirectory().path + "/plugin/download"
 
+        var sharedPrefsLayoutMode = "ALT_LAYOUT"
+
     }
+
+    enum class ReplacerLayouts {FULL, COMPACT}
 
 }

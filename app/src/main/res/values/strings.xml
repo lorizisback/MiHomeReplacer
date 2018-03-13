@@ -2,6 +2,7 @@
 
     <string name="mi_home_package_name">com.xiaomi.smarthome</string>
     <string name="mi_home_version_prefix">v.</string>
+    <string name="mi_home_version">0.3</string>
     <string name="mi_home_not_detected">Nessun MiHome installato!</string>
 
     <string name="app_name">MiReplacer</string>
@@ -15,9 +16,11 @@
     <string name="miitem_installed_version_label">Installata: </string>
     <string name="miitem_latest_version_label">Disponibile: </string>
     <string name="miitem_translation_available_label">Traduzione disponibile!</string>
+    <string name="miitem_usebest_available_label">Usa migliore disponibile!</string>
     <string name="miitem_update_available_label">Aggiornamento disponibile!</string>
     <string name="telegram_link">https://t.me/xcape4xiaomi</string>
     <string name="miitem_no_action_available">Nessuna azione disponibile per questo plugin</string>
+    <string name="mihome_change_layout_label">Cambia layout</string>
 
 
     <!-- SPLASHSCREEN -->

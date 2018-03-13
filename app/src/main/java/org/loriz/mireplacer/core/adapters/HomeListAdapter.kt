@@ -12,6 +12,8 @@ import org.loriz.mireplacer.R
 import org.loriz.mireplacer.utils.ImageUtils
 import android.view.LayoutInflater
 import android.widget.Toast
+import org.loriz.mireplacer.MainActivity
+import org.loriz.mireplacer.core.Constants
 import org.loriz.mireplacer.core.listener.OnPluginManagementListener
 import org.loriz.mireplacer.core.models.MiItem
 import org.loriz.mireplacer.update.UpdatePluginTask
@@ -24,6 +26,9 @@ import org.loriz.mireplacer.utils.Utils
 
 class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair<Int, MiItem>>, val onPluginManagementListener: OnPluginManagementListener? = null) : RecyclerView.Adapter<HomeListAdapter.MiViewHolder>() {
 
+    var layoutType = (context as MainActivity).getPreferences(Context.MODE_PRIVATE).getString(Constants.sharedPrefsLayoutMode, Constants.ReplacerLayouts.FULL.toString())
+
+
     override fun getItemCount(): Int {
         return installedPlugins.size
     }
@@ -35,98 +40,210 @@ class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair
 
         if (holder != null) {
 
-            holder.item = item.second
-
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                holder.container.clipToOutline = true
+            when (layoutType) {
+                Constants.ReplacerLayouts.FULL.toString() -> setupFullViewHolder(holder, item)
+                Constants.ReplacerLayouts.COMPACT.toString() -> setupCompactViewHolder(holder, item)
             }
+        }
+    }
 
-            holder.itemName.text = item.second.itemName
-            holder.latestVersion.text = context.resources.getString(R.string.miitem_latest_version_label) + item.second.latestVersion+ " IT"
-            holder.itemVersion.text = context.resources.getString(R.string.miitem_installed_version_label) + item.second.installedVersion
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): MiViewHolder {
+        val layout = when (layoutType) {
+            Constants.ReplacerLayouts.FULL.toString() -> R.layout.mihome_item
+            else -> R.layout.mihome_compact_item
+        }
 
-            if (item.second.language != null) {
-                when (item.second.language) {
+        val itemView = LayoutInflater.from(parent?.getContext())
+                .inflate(layout, parent, false)
 
-                    Utils.Companion.Flag.USEBEST -> {
-                        holder.flag.setImageDrawable(context.resources.getDrawable(R.drawable.use_best_flag))
-                        if (item.second.installedVersion as Int == item.second.latestVersion as Int) {
-                            // usebest plugin, but the correct one is now available
-                            holder.latestVersion.text = context.resources.getString(R.string.miitem_update_available_label)
-                        }
-                    }
+        return MiViewHolder(itemView)
+    }
 
-                    Utils.Companion.Flag.CHINESE -> {
-                        holder.flag.setImageDrawable(context.resources.getDrawable(R.drawable.chinese_flag))
-                        if (item.second.installedVersion as Int > item.second.latestVersion as Int) {
-                            // chinese plugin, newer than latest translated one (use best available)
-                        } else {
-                            // chinese plugin, older than latest translated one
-                            holder.latestVersion.text = context.resources.getString(R.string.miitem_translation_available_label)
-                        }
-                    }
+    ///////////////////////////////////////// SETUP OF VIEWHOLDERS ////////////////////////////////////////////////
 
-                    Utils.Companion.Flag.ITALIAN -> {
-                        holder.flag.setImageDrawable(context.resources.getDrawable(R.drawable.italian_flag))
-                        holder.itemVersion.text = holder.itemVersion.text.toString() + " IT"
+    private fun setupFullViewHolder(holder: MiViewHolder, item: Pair<Int, MiItem>) {
+
+        holder.item = item.second
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            holder.container.clipToOutline = true
+        }
+
+        holder.itemName.text = item.second.itemName
+        holder.latestVersion.text = context.resources.getString(R.string.miitem_latest_version_label) + item.second.latestVersion+ " IT"
+        holder.itemVersion.text = context.resources.getString(R.string.miitem_installed_version_label) + item.second.installedVersion
+
+        if (item.second.language != null) {
+            when (item.second.language) {
+
+                Utils.Companion.Flag.USEBEST -> {
+                    holder.flag.setImageDrawable(context.resources.getDrawable(R.drawable.use_best_flag))
+                    if (item.second.installedVersion as Int == item.second.latestVersion as Int) {
+                        // usebest plugin, but the correct one is now available
+                        holder.latestVersion.text = context.resources.getString(R.string.miitem_update_available_label)
+                    } else {
+                        // usebest plugin, still no updates
+                        holder.itemVersion.text = holder.itemVersion.text.toString() + " \"IT\""
                         holder.latestVersion.visibility = View.INVISIBLE
 
                     }
+                }
 
-                    Utils.Companion.Flag.OTHER -> {
-                        holder.flag.setImageDrawable(context.resources.getDrawable(R.drawable.old_flag))
+                Utils.Companion.Flag.CHINESE -> {
+                    holder.flag.setImageDrawable(context.resources.getDrawable(R.drawable.chinese_flag))
+                    if (item.second.installedVersion as Int > item.second.latestVersion as Int) {
+                        // chinese plugin, newer than latest translated one (use best available)
+                        holder.latestVersion.text = context.resources.getString(R.string.miitem_usebest_available_label)
+
+                    } else {
+                        // chinese plugin, older than latest translated one
+                        holder.latestVersion.text = context.resources.getString(R.string.miitem_translation_available_label)
                     }
+                }
+
+                Utils.Companion.Flag.ITALIAN -> {
+                    holder.flag.setImageDrawable(context.resources.getDrawable(R.drawable.italian_flag))
+                    holder.itemVersion.text = holder.itemVersion.text.toString() + " IT"
+                    holder.latestVersion.visibility = View.INVISIBLE
 
                 }
-            } else {
-                holder.flag.visibility = View.INVISIBLE
+
+                Utils.Companion.Flag.OTHER -> {
+                    holder.flag.setImageDrawable(context.resources.getDrawable(R.drawable.old_flag))
+                }
+
             }
+        } else {
+            holder.flag.visibility = View.INVISIBLE
+        }
 
-            ImageUtils.display(context, item.second.imgLink, holder.image)
+        ImageUtils.display(context, item.second.imgLink, holder.image)
 
 
+        setupMiItemClickListener(holder.container, item)
 
-            holder.container.setOnClickListener {
+    }
 
-                if (item.second.language == Utils.Companion.Flag.CHINESE || item.second.language == Utils.Companion.Flag.OTHER) {
-                    //if installed plugin is not either chinese or unknown (too old)...
+    private fun setupCompactViewHolder(holder: MiViewHolder, item: Pair<Int, MiItem>) {
 
-                    if (item.second.installedVersion as Int <= item.second.latestVersion as Int) {
-                        //...and installed version is less than latest translated version
-                        // download corresponding translated plugin
-                        val builder: AlertDialog.Builder =  AlertDialog.Builder(context)
-                        builder.setMessage("Vuoi scaricare il plugin ${item.second.installedVersion} italiano?"  )
-                                .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
-                                    object : UpdatePluginTask(context, item.second, onPluginManagementListener){}.execute()
-                                })
-                                .setNegativeButton(android.R.string.no, DialogInterface.OnClickListener { dialog, which ->
 
-                                })
-                                .show()
+        holder.item = item.second
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            holder.container.clipToOutline = true
+        }
+
+        holder.itemName.text = item.second.itemName
+        holder.latestVersion.text = context.resources.getString(R.string.miitem_latest_version_label) + item.second.latestVersion+ " IT"
+        holder.itemVersion.text = context.resources.getString(R.string.miitem_installed_version_label) + item.second.installedVersion
+
+        if (item.second.language != null) {
+            when (item.second.language) {
+
+                Utils.Companion.Flag.USEBEST -> {
+                    holder.flag.setImageDrawable(context.resources.getDrawable(R.drawable.use_best_compact_flag))
+                    if (item.second.installedVersion as Int == item.second.latestVersion as Int) {
+                        // usebest plugin, but the correct one is now available
+                        holder.latestVersion.text = context.resources.getString(R.string.miitem_update_available_label)
                     } else {
-                        //...and installed version is greater than latest translated plugin
-                        //prompt to download latest plugin and rename it as installed plugin
+                        // usebest plugin, still no updates
+                        holder.itemVersion.text = holder.itemVersion.text.toString() + " \"IT\""
+                        holder.latestVersion.visibility = View.INVISIBLE
 
-                        val builder: AlertDialog.Builder =  AlertDialog.Builder(context)
-                        builder.setMessage("Il plugin ${item.second.installedVersion} non e' stato ancora tradotto!\nVuoi scaricare e forzare l'utilizzo dell'ultimo tradotto disponibile (${item.second.latestVersion} IT)?"  )
-                                .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
-                                    builder.setMessage("Questa procedura AL MOMENTO non permette di riconoscere l'eventuale rilascio del vero plugin ${item.second.installedVersion} tradotto, vuoi comunque procedere?"  )
-                                            .setPositiveButton("Ho detto di si!", DialogInterface.OnClickListener { dialog, which ->
-                                                object : UpdatePluginTask(context, item.second, onPluginManagementListener, item.second.latestVersion){}.execute()
-                                            })
-                                            .setNegativeButton(android.R.string.no, DialogInterface.OnClickListener { dialog, which ->
-
-                                            })
-                                            .show()
-                                })
-                                .setNegativeButton(android.R.string.no, DialogInterface.OnClickListener { dialog, which ->
-
-                                })
-                                .show()
                     }
+                }
 
-                } else if (item.second.language == Utils.Companion.Flag.ITALIAN) {
-                    val builder: AlertDialog.Builder =  AlertDialog.Builder(context)
+                Utils.Companion.Flag.CHINESE -> {
+                    holder.flag.setImageDrawable(context.resources.getDrawable(R.drawable.chinese_compact_flag))
+                    if (item.second.installedVersion as Int > item.second.latestVersion as Int) {
+                        // chinese plugin, newer than latest translated one (use best available)
+                        holder.latestVersion.text = context.resources.getString(R.string.miitem_usebest_available_label)
+
+                    } else {
+                        // chinese plugin, older than latest translated one
+                        holder.latestVersion.text = context.resources.getString(R.string.miitem_translation_available_label)
+                    }
+                }
+
+                Utils.Companion.Flag.ITALIAN -> {
+                    holder.flag.setImageDrawable(context.resources.getDrawable(R.drawable.italian_compact_flag))
+                    holder.itemVersion.text = holder.itemVersion.text.toString() + " IT"
+                    holder.latestVersion.visibility = View.INVISIBLE
+
+                }
+
+                Utils.Companion.Flag.OTHER -> {
+                    holder.flag.setImageDrawable(context.resources.getDrawable(R.drawable.old_compact_flag))
+                }
+
+            }
+        } else {
+            holder.flag.visibility = View.INVISIBLE
+        }
+
+        ImageUtils.display(context, item.second.imgLink, holder.image)
+
+        setupMiItemClickListener(holder.container, item)
+
+    }
+
+
+
+    private fun setupMiItemClickListener(container : View, item: Pair<Int, MiItem>) {
+
+        container.setOnClickListener {
+
+            if (item.second.language == Utils.Companion.Flag.CHINESE || item.second.language == Utils.Companion.Flag.OTHER) {
+                //if installed plugin is not either chinese or unknown (too old)...
+
+                if (item.second.installedVersion as Int <= item.second.latestVersion as Int) {
+                    //...and installed version is less than latest translated version
+                    // download corresponding translated plugin
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+                    builder.setMessage("Vuoi scaricare il plugin ${item.second.installedVersion} italiano?")
+                            .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
+                                object : UpdatePluginTask(context, item.second, onPluginManagementListener) {}.execute()
+                            })
+                            .setNegativeButton(android.R.string.no, DialogInterface.OnClickListener { dialog, which ->
+
+                            })
+                            .show()
+                } else {
+                    //...and installed version is greater than latest translated plugin
+                    //prompt to download latest plugin and rename it as installed plugin
+
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+                    builder.setMessage("Il plugin ${item.second.installedVersion} non e' stato ancora tradotto!\nVuoi scaricare e forzare l'utilizzo dell'ultimo tradotto disponibile (${item.second.latestVersion} IT)?")
+                            .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
+                                object : UpdatePluginTask(context, item.second, onPluginManagementListener, item.second.latestVersion) {}.execute()
+                            })
+                            .setNegativeButton(android.R.string.no, DialogInterface.OnClickListener { dialog, which ->
+
+                            })
+                            .show()
+                }
+
+            } else if (item.second.language == Utils.Companion.Flag.ITALIAN) {
+                val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+                builder.setMessage("Vuoi cancellare il plugin?")
+                        .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
+                            if (Utils.cleanUp(item.second.installedVersion as Int)) {
+
+                                onPluginManagementListener?.OnDeleteSuccess()
+                            } else {
+                                onPluginManagementListener?.OnDeleteError()
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, DialogInterface.OnClickListener { dialog, which ->
+
+                        })
+                        .show()
+            } else if (item.second.language == Utils.Companion.Flag.USEBEST) {
+
+                if (item.second.installedVersion as Int > item.second.latestVersion as Int) {
+                    //...and installed version is greater than latest translated version
+                    // delete installed plugin
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(context)
                     builder.setMessage("Vuoi cancellare il plugin?")
                             .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
                                 if (Utils.cleanUp(item.second.installedVersion as Int)) {
@@ -140,56 +257,27 @@ class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair
 
                             })
                             .show()
-                } else if (item.second.language == Utils.Companion.Flag.USEBEST) {
-
-                    if (item.second.installedVersion as Int > item.second.latestVersion as Int) {
-                        //...and installed version is greater than latest translated version
-                        // delete installed plugin
-                        val builder: AlertDialog.Builder =  AlertDialog.Builder(context)
-                        builder.setMessage("Vuoi cancellare il plugin?")
-                                .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
-                                    if (Utils.cleanUp(item.second.installedVersion as Int)) {
-
-                                        onPluginManagementListener?.OnDeleteSuccess()
-                                    } else {
-                                        onPluginManagementListener?.OnDeleteError()
-                                    }
-                                })
-                                .setNegativeButton(android.R.string.no, DialogInterface.OnClickListener { dialog, which ->
-
-                                })
-                                .show()
-                    } else {
-                        //...and installed version is less or equal than latest translated plugin
-                        // prompt to download correct (not use best) plugin
-
-                        val builder: AlertDialog.Builder =  AlertDialog.Builder(context)
-                        builder.setMessage("E' ora disponibile il plugin ${item.second.installedVersion} in italiano. \nVuoi scaricarlo?"  )
-                                .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
-                                     object : UpdatePluginTask(context, item.second, onPluginManagementListener){}.execute()
-                                })
-                                .setNegativeButton(android.R.string.no, DialogInterface.OnClickListener { dialog, which ->
-
-                                })
-                                .show()
-                    }
-
                 } else {
-                    Toast.makeText(context, context.resources.getString(R.string.miitem_no_action_available), Toast.LENGTH_SHORT).show()
+                    //...and installed version is less or equal than latest translated plugin
+                    // prompt to download correct (not use best) plugin
+
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+                    builder.setMessage("E' ora disponibile il plugin ${item.second.installedVersion} in italiano. \nVuoi scaricarlo?")
+                            .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
+                                object : UpdatePluginTask(context, item.second, onPluginManagementListener) {}.execute()
+                            })
+                            .setNegativeButton(android.R.string.no, DialogInterface.OnClickListener { dialog, which ->
+
+                            })
+                            .show()
                 }
+
+            } else {
+                Toast.makeText(context, context.resources.getString(R.string.miitem_no_action_available), Toast.LENGTH_SHORT).show()
             }
+
         }
     }
-
-
-
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): MiViewHolder {
-        val itemView = LayoutInflater.from(parent?.getContext())
-                .inflate(R.layout.mihome_item, parent, false)
-
-        return MiViewHolder(itemView)
-    }
-
 
 
     inner class MiViewHolder(view: View) : RecyclerView.ViewHolder(view) {

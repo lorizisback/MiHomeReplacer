@@ -97,7 +97,6 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-
         fragmentTransaction.add(R.id.mainPanel, frag)
         fragmentTransaction.commit()
 
