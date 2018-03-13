@@ -24,6 +24,8 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
+        supportActionBar?.title = getString(R.string.app_name) +" "+ getString(R.string.mi_home_version_prefix) + getString(R.string.mi_home_version) + " Alpha"
+
         setupView()
 
         super.onCreate(savedInstanceState)
