@@ -1,10 +1,12 @@
 package org.loriz.mireplacer
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import kotlinx.android.synthetic.main.top_panel.*
+import org.loriz.mireplacer.core.Constants
 import org.loriz.mireplacer.fragments.ReplacerFragment
 import org.loriz.mireplacer.fragments.WarningFragment
 import org.loriz.mireplacer.utils.Utils
@@ -25,6 +27,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         supportActionBar?.title = getString(R.string.app_name) +" "+ getString(R.string.mi_home_version_prefix) + getString(R.string.mi_home_version) + " Alpha"
+
+        with (getPreferences(Context.MODE_PRIVATE)) {
+            if (!this.contains(Constants.sharedPrefsLayoutMode)) {
+                this.edit().putString(Constants.sharedPrefsLayoutMode, Constants.ReplacerLayouts.FULL.toString()).apply()
+            }
+        }
+
+        Utils.prepareMiReplacerFolder()
 
         setupView()
 

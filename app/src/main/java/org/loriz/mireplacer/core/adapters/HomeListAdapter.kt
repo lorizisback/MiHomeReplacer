@@ -202,7 +202,7 @@ class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair
                     val builder: AlertDialog.Builder = AlertDialog.Builder(context)
                     builder.setMessage("Vuoi scaricare il plugin ${item.second.installedVersion} italiano?")
                             .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
-                                object : UpdatePluginTask(context, item.second, onPluginManagementListener) {}.execute()
+                                UpdatePluginTask(context, item.second, onPluginManagementListener).execute()
                             })
                             .setNegativeButton(android.R.string.no, DialogInterface.OnClickListener { dialog, which ->
 
@@ -215,7 +215,7 @@ class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair
                     val builder: AlertDialog.Builder = AlertDialog.Builder(context)
                     builder.setMessage("Il plugin ${item.second.installedVersion} non e' stato ancora tradotto!\nVuoi scaricare e forzare l'utilizzo dell'ultimo tradotto disponibile (${item.second.latestVersion} IT)?")
                             .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
-                                object : UpdatePluginTask(context, item.second, onPluginManagementListener, item.second.latestVersion) {}.execute()
+                                UpdatePluginTask(context, item.second, onPluginManagementListener, item.second.latestVersion).execute()
                             })
                             .setNegativeButton(android.R.string.no, DialogInterface.OnClickListener { dialog, which ->
 
@@ -264,7 +264,7 @@ class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair
                     val builder: AlertDialog.Builder = AlertDialog.Builder(context)
                     builder.setMessage("E' ora disponibile il plugin ${item.second.installedVersion} in italiano. \nVuoi scaricarlo?")
                             .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
-                                object : UpdatePluginTask(context, item.second, onPluginManagementListener) {}.execute()
+                                UpdatePluginTask(context, item.second, onPluginManagementListener).execute()
                             })
                             .setNegativeButton(android.R.string.no, DialogInterface.OnClickListener { dialog, which ->
 

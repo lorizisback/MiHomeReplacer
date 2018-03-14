@@ -19,11 +19,20 @@ class Constants {
         var packageFileExtension = ".mpk"
         var useBestFileExtension = ".marker"
         var pluginDownloadFolder = Environment.getExternalStorageDirectory().path + "/plugin/download"
+        var baseFolder = Environment.getExternalStorageDirectory().path + "/plugin"
+        var miReplacerFolderName = ".mireplacer"
+        var miReplacerDownloadFolderName = "download"
 
         var sharedPrefsLayoutMode = "ALT_LAYOUT"
+
+        fun getMiReplacerDownloadFolder() : String {
+            return baseFolder + "/" + miReplacerFolderName + "/" + miReplacerDownloadFolderName
+        }
 
     }
 
     enum class ReplacerLayouts {FULL, COMPACT}
+
+
 
 }

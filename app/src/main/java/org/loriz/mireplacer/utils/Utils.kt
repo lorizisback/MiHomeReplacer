@@ -116,7 +116,7 @@ class Utils {
             }
         }
 
-        fun downloadFile(context: Context, url : String, path: String, md5: String? = null, useBest: Boolean = false) : Boolean {
+        fun downloadFile(url : String, path: String) : Boolean {
             var input: DataInputStream? = null
             var output: OutputStream? = null
             var connection: HttpURLConnection? = null
@@ -166,17 +166,10 @@ class Utils {
                         deleteOldInstalledApk(path)
                     }
                     oldPlugin.delete()
+
                 }
 
                 newPlugin.renameTo(oldPlugin)
-
-                if (useBest) {
-                    File(path + Constants.useBestFileExtension).createNewFile()
-                } else {
-                    if (File(path + Constants.useBestFileExtension).exists())  {
-                        File(path + Constants.useBestFileExtension).delete()
-                    }
-                }
 
 
             } catch (e: Exception) {
@@ -210,6 +203,20 @@ class Utils {
         }
 
 
+        fun writeStringToFile(path: String, text: String) : Boolean {
+
+            val stream = FileOutputStream(File(path))
+            try {
+                stream.write(text.toByteArray())
+            } catch (e: Exception) {
+                return false
+            }
+            finally {
+                stream.close()
+            }
+            return true
+        }
+
 
         fun deleteOldInstalledApk(item: Int) : Boolean {
 
@@ -220,9 +227,9 @@ class Utils {
 
 
         fun deleteInstalledMPK(item : Int) : Boolean {
-            val result = (File(Constants.pluginDownloadFolder + "/" + getFolderByInstalledItemId(item) + "/" + item + Constants.packageFileExtension).delete()
+            val result = (File(Constants.pluginDownloadFolder + "/" + (getFolderByInstalledItemId(item) ?: 0) + "/" + item + Constants.packageFileExtension).delete()
                     or
-                    File(Constants.pluginDownloadFolder + "/" + getFolderByInstalledItemId(item) + "/" + item + Constants.useBestFileExtension).delete())
+                    File(Constants.getMiReplacerDownloadFolder() + "/" + (getFolderByInstalledItemId(item) ?: 0) + "/" + item + Constants.packageFileExtension + Constants.useBestFileExtension).delete())
             return result
         }
 
@@ -248,6 +255,39 @@ class Utils {
                     .show()
         }
 
+        fun prepareMiReplacerFolder() {
+            val downloadFolder = File(Constants.pluginDownloadFolder)
+
+            val pluginsFolder = Constants.baseFolder
+            val miReplacerFolder = Constants.miReplacerFolderName
+            val miReplacerDownloadFolder = Constants.miReplacerDownloadFolderName
+
+            val baseFolder = "$pluginsFolder/$miReplacerFolder/$miReplacerDownloadFolder"
+            val baseFolderFile = File(baseFolder)
+            if (!baseFolderFile.exists()) {
+                //if mireplacer folder does not exists (maybe first time using MiReplacer), create the folder structure
+                baseFolderFile.mkdirs()
+                replicateFolderStructure(downloadFolder, baseFolderFile)
+            } else {
+                //mireplacer folder exists, update the folder structure
+                replicateFolderStructure(downloadFolder, baseFolderFile)
+            }
+
+        }
+
+        private fun replicateFolderStructure(fromFolder: File, toFolder: File) : Boolean {
+            return if (fromFolder.exists() && toFolder.exists()) {
+
+                fromFolder.listFiles().forEach {
+                    if (it.isDirectory && !File(toFolder.absolutePath +"/"+ it.name).isDirectory()) {
+                        File(toFolder.absolutePath +"/"+ it.name).mkdirs()
+                    }
+                }
+
+                true
+
+            } else false
+        }
 
 
         fun getLatestInstalledMiItems(parentDir: File, extension: String): HashMap<Int, Int>? {

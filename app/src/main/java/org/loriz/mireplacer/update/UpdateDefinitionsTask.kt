@@ -29,7 +29,7 @@ open class UpdateDefinitionsTask(val context: Context) : AsyncTask<Void, Void, E
     override fun doInBackground(vararg params: Void?): Elements? {
 
         //download plugin.json
-        if (Utils.downloadFile(context, url, context.filesDir.path + "/plugins.json") != true) return null
+        if (Utils.downloadFile(url, context.filesDir.path + "/plugins.json") != true) return null
 
         if (parseJSON() != true) return null
 
