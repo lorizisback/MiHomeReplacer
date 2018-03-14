@@ -23,30 +23,30 @@
 
     <TextView
         android:id="@+id/mi_item_item_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_width="0dp"
+        android:layout_height="26dp"
+        android:layout_marginBottom="3dp"
+        android:layout_marginStart="2dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="2dp"
         android:ellipsize="end"
-        android:maxLength="13"
-        android:minLines="1"
+        android:maxLines="1"
         android:textColor="@color/darkText"
-        android:textSize="@dimen/text_size_s"
+        android:textSize="@dimen/text_size_xs"
         app:layout_constraintBottom_toTopOf="@+id/mi_item_plugin_latest_version"
         app:layout_constraintEnd_toStartOf="@+id/mi_item_image"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/mi_item_flag"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Depuratore" />
+        app:layout_constraintWidth_default="wrap"
+        tools:text="Depuratore per la casa " />
 
     <TextView
         android:id="@+id/mi_item_plugin_latest_version"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="1dp"
+        android:layout_marginStart="2dp"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:textSize="@dimen/text_size_xxxs"
         android:textStyle="italic"
         app:layout_constraintBottom_toTopOf="@+id/mi_item_plugin_version"
@@ -56,11 +56,12 @@
 
     <TextView
         android:id="@+id/mi_item_plugin_version"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="2dp"
+        android:layout_marginStart="2dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textSize="@dimen/text_size_xxxs"
         android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -70,7 +71,7 @@
 
     <ImageView
         android:id="@+id/mi_item_flag"
-        android:layout_width="25dp"
+        android:layout_width="20dp"
         android:layout_height="match_parent"
         android:adjustViewBounds="false"
         android:cropToPadding="false"

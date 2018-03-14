@@ -24,24 +24,27 @@
 
     <TextView
         android:id="@+id/mi_item_item_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:ellipsize="end"
-        android:maxLength="20"
         android:maxLines="2"
         android:textColor="@color/darkText"
-        android:textSize="@dimen/text_size_m"
+        android:textSize="@dimen/text_size_s"
+        app:layout_constraintEnd_toStartOf="@+id/mi_item_flag"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/mi_item_image"
         app:layout_constraintTop_toTopOf="@+id/mi_item_image"
-        tools:text="Depuratore" />
+        app:layout_constraintWidth_default="wrap"
+        tools:text="Depuratore per la casa " />
 
     <TextView
         android:id="@+id/mi_item_plugin_latest_version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:textSize="@dimen/text_size_xxs"
         android:textStyle="italic"
         app:layout_constraintBottom_toTopOf="@+id/mi_item_plugin_version"
@@ -53,7 +56,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:textSize="@dimen/text_size_xxs"
         android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="@+id/mi_item_image"
