@@ -30,5 +30,6 @@
     <string name="error_permission_text">Questa applicazione non puo\' funzionare senza i permessi che hai negato!</string>
     <string name="error_title">Attenzione</string>
     <string name="update_plugin_dialog_message">Aggiornamento in corso...</string>
+    <string name="upload_plugin_dialog_message">Upload plugin in corso...</string>
 
 </resources>

@@ -37,6 +37,10 @@ class ReplacerFragment : Fragment() {
     var listInstalledPlugins: ArrayList<Pair<Int, MiItem>> = arrayListOf()
 
     val pluginManagerListener = object : OnPluginManagementListener {
+        override fun OnUploadSuccess() {}
+
+        override fun OnUploadError() {}
+
         override fun OnDownloadSuccess() {
             refreshList()
             mAdapter?.notifyDataSetChanged()

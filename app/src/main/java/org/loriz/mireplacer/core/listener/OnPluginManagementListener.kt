@@ -10,5 +10,7 @@ interface OnPluginManagementListener {
     fun OnDownloadError()
     fun OnDeleteSuccess()
     fun OnDeleteError()
+    fun OnUploadSuccess()
+    fun OnUploadError()
 
 }
