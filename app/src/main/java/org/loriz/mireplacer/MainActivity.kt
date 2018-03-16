@@ -36,6 +36,10 @@ class MainActivity : AppCompatActivity() {
 
         Utils.prepareMiReplacerFolder()
 
+        Utils.killProcess(this, resources.getString(R.string.mi_home_package_name))
+        Utils.killProcess(this, resources.getString(R.string.mi_home_package_name))
+        Utils.killProcess(this, resources.getString(R.string.mi_home_package_name))
+
         setupView()
 
         super.onCreate(savedInstanceState)
