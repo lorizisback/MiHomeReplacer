@@ -120,6 +120,7 @@ class Utils {
             var input: DataInputStream? = null
             var output: OutputStream? = null
             var connection: HttpURLConnection? = null
+            var outPath = path.replace("download", ".mireplacer/download")
             try {
                 val url = URL(url)
                 connection = url.openConnection() as HttpURLConnection
@@ -133,7 +134,7 @@ class Utils {
 
                 // download the file
                 input = DataInputStream(url.openStream())
-                output = DataOutputStream(FileOutputStream(path+".temp"))
+                output = DataOutputStream(FileOutputStream(outPath + ".temp"))
 
                 val contentLength = connection.getContentLength()
 
@@ -152,7 +153,7 @@ class Utils {
                 output.close()
 
                 var oldPlugin = File(path)
-                var newPlugin = File(path+".temp")
+                var newPlugin = File(outPath + ".temp")
 
                 Log.d("MiReplacer", "MD5 = "+MD5.calculateMD5(newPlugin))
 
