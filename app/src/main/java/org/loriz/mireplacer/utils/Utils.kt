@@ -13,8 +13,10 @@ import org.loriz.mireplacer.core.Constants
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.zip.ZipEntry
 import java.util.zip.ZipException
 import java.util.zip.ZipFile
+import java.util.zip.ZipOutputStream
 
 
 /**
@@ -114,6 +116,39 @@ class Utils {
                 }
 
             }
+        }
+
+        fun zip(_files: Array<String>, zipFileName: String) : Boolean {
+            try {
+                var origin: BufferedInputStream? = null
+                val dest = FileOutputStream(zipFileName)
+                val out = ZipOutputStream(BufferedOutputStream(
+                        dest))
+                val data = ByteArray(1024000)
+
+                for (i in _files.indices) {
+                    Log.d("Mireplacer ", "Compressing Adding: " + _files[i])
+                    val fi = FileInputStream(_files[i])
+                    origin = BufferedInputStream(fi, 1024000)
+
+                    val entry = ZipEntry(_files[i].substring(_files[i].lastIndexOf("/") + 1))
+                    out.putNextEntry(entry)
+                    var count: Int = -1
+
+                    while ({ count = origin.read(data, 0, 1024000); count}() != -1) {
+                        out.write(data, 0, count)
+                    }
+                    origin.close()
+                }
+
+                out.close()
+            } catch (e: Exception) {
+                Log.d("MiReplacer", "Zip of files failed!")
+                e.printStackTrace()
+                return false
+            }
+            return true
+
         }
 
         fun downloadFile(url : String, path: String) : Boolean {
