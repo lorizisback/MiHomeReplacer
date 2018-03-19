@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity() {
 
         setupView()
 
+
         super.onCreate(savedInstanceState)
     }
 

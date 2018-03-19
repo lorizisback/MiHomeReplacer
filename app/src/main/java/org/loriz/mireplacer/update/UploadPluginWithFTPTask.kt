@@ -4,6 +4,7 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.os.AsyncTask
 import android.util.Log
+import org.apache.commons.io.FileUtils
 import org.apache.commons.net.ftp.FTP
 import org.apache.commons.net.ftp.FTPClient
 import org.loriz.mireplacer.R
@@ -18,6 +19,7 @@ class UploadPluginWithFTPTask(val context : Context, val pluginNumber: Int, val 
 
     lateinit var con: FTPClient
     lateinit var mProgressDialog : ProgressDialog
+    var pluginFolder : Int = 0
 
 
     override fun onPreExecute() {
@@ -33,8 +35,9 @@ class UploadPluginWithFTPTask(val context : Context, val pluginNumber: Int, val 
 
     override fun doInBackground(vararg params: Void?): Boolean {
 
-        var pluginFolder = Utils.getFolderByInstalledItemId(pluginNumber) ?: return false
+        pluginFolder = Utils.getFolderByInstalledItemId(pluginNumber) ?: return false
 
+        Utils.zip(arrayOf(Constants.pluginDownloadFolder + "/" + pluginFolder + "/" + pluginNumber + Constants.packageFileExtension), Constants.getMiReplacerDownloadFolder() + "/" + pluginFolder + "/" + "${pluginFolder}_${pluginNumber}.arc")
 
         try {
             con = FTPClient()
@@ -43,18 +46,19 @@ class UploadPluginWithFTPTask(val context : Context, val pluginNumber: Int, val 
             if (con.login("u159600289.replacer", "replacer1$#")) {
                 con.enterLocalPassiveMode() // important!
                 con.setFileType(FTP.BINARY_FILE_TYPE)
+                //con.setBufferSize(1024000)
 
-                val data = Constants.pluginDownloadFolder + "/" + pluginFolder + "/" + pluginNumber + Constants.packageFileExtension
+                val data = Constants.getMiReplacerDownloadFolder() + "/" + pluginFolder + "/" + pluginFolder + "_" + pluginNumber + ".arc"
 
                 val `in` = FileInputStream(File(data))
-                val result = con.storeFile("/${pluginFolder}_${pluginNumber}", `in`)
+                val result = con.storeFile("/${pluginFolder}_${pluginNumber}.arc", `in`)
                 `in`.close()
                 if (result) Log.v("MiReplacer", "Upload of plugin ${pluginNumber} successful!")
                 con.logout()
                 con.disconnect()
                 return true
             } else {
-                Log.d("MiReplacer", "Upload failed: wrong credentials?")
+                Log.d("MiReplacer", "Upload failed: login failed ")
                 return false
             }
         } catch (e: Exception) {
@@ -69,6 +73,7 @@ class UploadPluginWithFTPTask(val context : Context, val pluginNumber: Int, val 
 
         mProgressDialog.dismiss()
 
+        File(Constants.getMiReplacerDownloadFolder() + "/" + pluginFolder + "/" + "${pluginFolder}_${pluginNumber}.arc").delete()
 
         if (result) {
 

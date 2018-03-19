@@ -37,6 +37,7 @@ dependencies {
     compile 'com.github.kittinunf.fuel:fuel-android:1.12.1'
     compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.9.2'
     compile 'commons-net:commons-net:3.6'
+    compile 'commons-io:commons-io:2.6'
 
 
 }
