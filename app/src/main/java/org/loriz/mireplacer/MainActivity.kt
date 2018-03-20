@@ -10,6 +10,10 @@ import org.loriz.mireplacer.core.Constants
 import org.loriz.mireplacer.fragments.ReplacerFragment
 import org.loriz.mireplacer.fragments.WarningFragment
 import org.loriz.mireplacer.utils.Utils
+import com.crashlytics.android.Crashlytics
+import io.fabric.sdk.android.Fabric
+
+
 
 /**
  * Created by loriz on 1/24/18.
@@ -32,6 +36,8 @@ class MainActivity : AppCompatActivity() {
                 this.edit().putString(Constants.sharedPrefsLayoutMode, Constants.ReplacerLayouts.FULL.toString()).apply()
             }
         }
+
+        Fabric.with(this, Crashlytics())
 
         Utils.prepareMiReplacerFolder()
 

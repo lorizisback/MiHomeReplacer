@@ -33,6 +33,10 @@
         <activity android:name="org.loriz.mireplacer.MainActivity"
             android:screenOrientation="portrait"/>
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="3c4f9955d564d21a0a6edd8e6e3fcfe0c0e09768" />
+
     </application>
 
 </manifest>
