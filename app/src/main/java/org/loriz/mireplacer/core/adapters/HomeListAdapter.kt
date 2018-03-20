@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.opengl.Visibility
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatDialog
 import android.support.v7.widget.RecyclerView
@@ -76,6 +77,10 @@ class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair
         }
 
         holder.itemName.text = item.second.itemName
+
+        holder.latestVersion.visibility = View.VISIBLE
+        holder.itemVersion.visibility = View.VISIBLE
+
         holder.latestVersion.text = context.resources.getString(R.string.miitem_latest_version_label) + item.second.latestVersion+ " IT"
         holder.itemVersion.text = context.resources.getString(R.string.miitem_installed_version_label) + item.second.installedVersion
 
@@ -91,7 +96,6 @@ class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair
                         // usebest plugin, still no updates
                         holder.itemVersion.text = holder.itemVersion.text.toString() + " \"IT\""
                         holder.latestVersion.visibility = View.INVISIBLE
-
                     }
                 }
 
@@ -138,6 +142,9 @@ class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             holder.container.clipToOutline = true
         }
+
+        holder.latestVersion.visibility = View.VISIBLE
+        holder.itemVersion.visibility = View.VISIBLE
 
         holder.itemName.text = item.second.itemName
         holder.latestVersion.text = context.resources.getString(R.string.miitem_latest_version_label) + item.second.latestVersion+ " IT"

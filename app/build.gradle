@@ -10,8 +10,8 @@ android {
         applicationId "org.loriz.mihomereplacer"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 6
-        versionName "0.4.1"
+        versionCode 7
+        versionName "0.4.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

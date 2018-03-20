@@ -2,7 +2,7 @@
 
     <string name="mi_home_package_name">com.xiaomi.smarthome</string>
     <string name="mi_home_version_prefix">v.</string>
-    <string name="mi_home_version">0.4.1</string>
+    <string name="mi_home_version">0.4.5</string>
     <string name="mi_home_not_detected">Nessun MiHome installato!</string>
 
     <string name="app_name">MiReplacer</string>
