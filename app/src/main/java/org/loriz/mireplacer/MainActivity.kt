@@ -21,7 +21,6 @@ class MainActivity : AppCompatActivity() {
     var isPVersion: Boolean = false
     var isInstalled: Boolean = false
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         setContentView(R.layout.activity_main)

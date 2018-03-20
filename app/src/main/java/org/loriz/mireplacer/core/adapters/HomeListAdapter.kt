@@ -1,11 +1,11 @@
 package org.loriz.mireplacer.core.adapters
 
-import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatDialog
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
@@ -219,7 +219,7 @@ class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair
                     AlertDialog.Builder(context).setMessage("Il plugin ${item.second.installedVersion} non e' stato ancora tradotto!\nVuoi scaricare e forzare l'utilizzo dell'ultimo tradotto disponibile (${item.second.latestVersion} IT)?")
                             .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
 
-                                val xcapeDialog = Dialog(context)
+                                val xcapeDialog = AppCompatDialog(context)
                                 xcapeDialog.setContentView(R.layout.mihome_dialog)
                                 xcapeDialog.setCanceledOnTouchOutside(false)
                                 xcapeDialog.setCancelable(false)
