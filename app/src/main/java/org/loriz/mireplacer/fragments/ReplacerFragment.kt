@@ -51,12 +51,11 @@ class ReplacerFragment : Fragment() {
         }
 
         override fun OnDownloadError() {
-            Toast.makeText(context, "Aggiornamento fallito!", Toast.LENGTH_SHORT).show()
-
+            if (context != null) Toast.makeText(context, "Aggiornamento fallito!", Toast.LENGTH_SHORT).show()
         }
 
         override fun OnDeleteError() {
-            Toast.makeText(context, "Cancellazione fallita!", Toast.LENGTH_SHORT).show()
+            if (context != null) Toast.makeText(context, "Cancellazione fallita!", Toast.LENGTH_SHORT).show()
 
         }
 

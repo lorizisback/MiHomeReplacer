@@ -29,7 +29,19 @@
     <string name="error_network_text">Errore di rete! Si prega di riprovare piu\' tardi.</string>
     <string name="error_permission_text">Questa applicazione non puo\' funzionare senza i permessi che hai negato!</string>
     <string name="error_title">Attenzione</string>
+
+    <!-- REPLACER FRAGMENT -->
     <string name="update_plugin_dialog_message">Aggiornamento in corso...</string>
     <string name="upload_plugin_dialog_message">Upload plugin in corso...</string>
+    <string name="mihome_download_italian_plugin_request">Vuoi scaricare il plugin %1$d italiano?</string>
+    <string name="mihome_delete_plugin_request">Vuoi cancellare il plugin?</string>
+    <string name="mihome_use_best_plugin_request">Il plugin %1$d non e\' stato ancora tradotto!\nVuoi scaricare e forzare l\'utilizzo dell\'ultimo tradotto disponibile (%2$d IT)?</string>
+    <string name="mihome_use_best_plugin_now_available_request">E\' ora disponibile il plugin %1$d in italiano. \nVuoi scaricarlo?</string>
+    <string name="mihome_upload_plugin_dialog_title">xCape wants you!</string>
+    <string name="mihome_upload_plugin_dialog_body">Prima di procedere, aiuta il processo di traduzione inviandoci il plugin %1$dcon cinese!</string>
+    <string name="mihome_upload_plugin_dialog_yes">CI STO!</string>
+    <string name="mihome_upload_plugin_dialog_no">NO</string>
+    <string name="mihome_upload_plugin_dialog_continue_download">Grazie per il tuo aiuto! \nOra puoi procedere alla sostituzione del plugin cinese col migliore disponibile</string>
+    <string name="mihome_upload_plugin_failed">Upload fallito!</string>
 
 </resources>

@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.opengl.Visibility
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatDialog
 import android.support.v7.widget.RecyclerView
@@ -212,7 +211,7 @@ class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair
                 if (item.second.installedVersion as Int <= item.second.latestVersion as Int) {
                     //...and installed version is less than latest translated version
                     // download corresponding translated plugin
-                    AlertDialog.Builder(context).setMessage("Vuoi scaricare il plugin ${item.second.installedVersion} italiano?")
+                    AlertDialog.Builder(context).setMessage(context.getString(R.string.mihome_download_italian_plugin_request, item.second.installedVersion))
                             .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
                                 UpdatePluginTask(context, item.second, onPluginManagementListener).execute()
                             })
@@ -223,7 +222,7 @@ class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair
                 } else {
                     //...and installed version is greater than latest translated plugin
                     //prompt to download latest plugin and rename it as installed plugin
-                    AlertDialog.Builder(context).setMessage("Il plugin ${item.second.installedVersion} non e' stato ancora tradotto!\nVuoi scaricare e forzare l'utilizzo dell'ultimo tradotto disponibile (${item.second.latestVersion} IT)?")
+                    AlertDialog.Builder(context).setMessage(context.getString(R.string.mihome_use_best_plugin_request, item.second.installedVersion, item.second.latestVersion))
                             .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
 
                                 val xcapeDialog = AppCompatDialog(context)
@@ -246,10 +245,10 @@ class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair
                                     dialogContainer?.clipToOutline = true
                                 }
 
-                                title?.setText("xCape wants you!")
-                                body?.setText("Prima di procedere, aiuta il processo di traduzione inviandoci il plugin ${item.second.installedVersion} cinese!")
-                                positive?.setText("CI STO!")
-                                negative?.setText("NO")
+                                title?.text = context.getString(R.string.mihome_upload_plugin_dialog_title)
+                                body?.text = context.getString(R.string.mihome_upload_plugin_dialog_body, item.second.installedVersion)
+                                positive?.text = context.getString(R.string.mihome_upload_plugin_dialog_yes)
+                                negative?.text = context.getString(R.string.mihome_upload_plugin_dialog_no)
 
                                 positive?.setOnClickListener {
                                     xcapeDialog.dismiss()
@@ -261,7 +260,7 @@ class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair
                                         override fun OnDeleteError() {}
 
                                         override fun OnUploadSuccess() {
-                                            AlertDialog.Builder(context).setMessage("Grazie per il tuo aiuto! \nOra puoi procedere alla sostituzione del plugin cinese col migliore disponibile")
+                                            AlertDialog.Builder(context).setMessage(context.getString(R.string.mihome_upload_plugin_dialog_continue_download))
                                                     .setPositiveButton(android.R.string.ok, DialogInterface.OnClickListener { dialog, which ->
                                                         UpdatePluginTask(context, item.second, onPluginManagementListener, item.second.latestVersion).execute()
                                                     })
@@ -270,7 +269,7 @@ class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair
                                         }
 
                                         override fun OnUploadError() {
-                                            Toast.makeText(context, "Upload fallito!", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(context, context.getString(R.string.mihome_upload_plugin_failed), Toast.LENGTH_SHORT).show()
                                         }
 
                                     }).execute()
@@ -293,7 +292,7 @@ class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair
                 }
 
             } else if (item.second.language == Utils.Companion.Flag.ITALIAN) {
-                AlertDialog.Builder(context).setMessage("Vuoi cancellare il plugin?")
+                AlertDialog.Builder(context).setMessage(context.getString(R.string.mihome_delete_plugin_request))
                         .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
                             if (Utils.cleanUp(item.second.installedVersion as Int)) {
                                 onPluginManagementListener?.OnDeleteSuccess()
@@ -310,7 +309,7 @@ class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair
                 if (item.second.installedVersion as Int > item.second.latestVersion as Int) {
                     //...and installed version is greater than latest translated version
                     // delete installed plugin
-                    AlertDialog.Builder(context).setMessage("Vuoi cancellare il plugin?")
+                    AlertDialog.Builder(context).setMessage(context.getString(R.string.mihome_delete_plugin_request))
                             .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
                                 if (Utils.cleanUp(item.second.installedVersion as Int)) {
 
@@ -327,7 +326,7 @@ class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair
                     //...and installed version is less or equal than latest translated plugin
                     // prompt to download correct (not use best) plugin
 
-                    AlertDialog.Builder(context).setMessage("E' ora disponibile il plugin ${item.second.installedVersion} in italiano. \nVuoi scaricarlo?")
+                    AlertDialog.Builder(context).setMessage(context.getString(R.string.mihome_use_best_plugin_now_available_request, item.second.installedVersion))
                             .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
                                 UpdatePluginTask(context, item.second, onPluginManagementListener).execute()
                             })

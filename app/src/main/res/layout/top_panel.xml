@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_vertical"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:orientation="vertical">
 
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <RelativeLayout
             android:id="@+id/top_panel_image_container"
@@ -24,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
-                android:src="@drawable/mi_home_p"/>
+                android:src="@drawable/mi_home_p" />
 
             <ImageView
                 android:id="@+id/top_panel_mihome_stock_icon"
@@ -32,7 +31,7 @@
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
                 android:src="@drawable/mi_home_stock"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/top_panel_no_mihome_icon"
@@ -40,35 +39,34 @@
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
                 android:src="@drawable/no_mi_home"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
         </RelativeLayout>
 
         <TextView
-            android:layout_toRightOf="@id/top_panel_image_container"
             android:id="@+id/top_panel_main_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/top_panel_image_container"
             android:layout_alignBottom="@id/top_panel_image_container"
-            android:paddingStart="@dimen/padding_s"
+            android:layout_toRightOf="@id/top_panel_image_container"
             android:gravity="center_vertical"
-            tools:text="@string/mihome_mod_detected"
+            android:paddingStart="@dimen/padding_s"
             android:textColor="@color/darkText"
-            android:textSize="@dimen/text_size_l"/>
+            android:textSize="@dimen/text_size_l"
+            tools:text="@string/mihome_mod_detected" />
 
 
         <TextView
             android:id="@+id/top_panel_version_text_upper"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="v.10.3.2"
-            android:textStyle="italic"
-            android:textColor="@color/lightText"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="@dimen/margin_s"
             android:layout_marginTop="@dimen/margin_xs"
-            />
+            android:layout_marginEnd="@dimen/margin_s"
+            android:textColor="@color/lightText"
+            android:textStyle="italic"
+            tools:text="v.10.3.2" />
 
     </RelativeLayout>
 

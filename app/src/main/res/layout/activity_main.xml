@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <!--<FrameLayout
         android:id="@+id/topPanel"
@@ -10,22 +10,21 @@
         android:layout_height="80dp">
     </FrameLayout>-->
 
-    <include layout="@layout/top_panel"
+    <include
+        layout="@layout/top_panel"
         android:layout_width="match_parent"
         android:layout_height="80dp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/separator"/>
+        android:background="@color/separator" />
 
     <FrameLayout
         android:id="@+id/mainPanel"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
-    </FrameLayout>
-
+        android:layout_weight="1"></FrameLayout>
 
 
 </LinearLayout>
