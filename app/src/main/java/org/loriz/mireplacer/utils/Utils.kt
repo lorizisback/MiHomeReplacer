@@ -354,6 +354,14 @@ class Utils {
                     } else {
 
                         if (file.name.endsWith(extension)) {
+
+                            //workaround
+                            try {
+                                file.name.removeSuffix(extension).toInt()
+                            } catch (e: NumberFormatException) {
+                                continue
+                            }
+
                             var folderName = file.parent.split("/").last().toInt()
 
                             if (inFiles.containsKey(folderName)) {
