@@ -51,11 +51,12 @@ class ReplacerFragment : Fragment() {
         }
 
         override fun OnDownloadError() {
-            if (context != null) Toast.makeText(context, "Aggiornamento fallito!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Aggiornamento fallito!", Toast.LENGTH_SHORT).show()
+
         }
 
         override fun OnDeleteError() {
-            if (context != null) Toast.makeText(context, "Cancellazione fallita!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Cancellazione fallita!", Toast.LENGTH_SHORT).show()
 
         }
 
@@ -145,30 +146,63 @@ class ReplacerFragment : Fragment() {
 
 
 
+
     private fun refreshList() {
 
         listInstalledPlugins.clear()
         Utils.getLatestInstalledMiItems(File(path), extension)?.forEach {
             val key = it.key
+            val item = Constants.MI_ITEMS[key]
 
-            var item = Constants.MI_ITEMS[key]
-
-            if (item != null) {
+            if (item != null ) {
                 item.installedVersion = it.value.toInt()
-                item.md5 = MD5.calculateMD5(File(path + "/" + key + "/" + it.value + extension))
-                item.language = if (item.md5 != null && Utils.isPluginItalian(item.md5 as String)) {
-                    if (File(miReplacerDownloadFolderPath + "/" + key + "/" + it.value + extension + Constants.useBestFileExtension).isFile) {
-                        Utils.Companion.Flag.USEBEST
-                    } else {
-                        Utils.Companion.Flag.ITALIAN
-                    }
-                } else if (item.installedVersion as Int >= item.previousVersion as Int) {
-                    Utils.Companion.Flag.CHINESE
+                item.md5 = MD5.calculateMD5(File("$path/$key/${it.value}$extension")).toUpperCase()
+                if (item.md5 == null) {
+                    item.md5 = "0000000000000000000000000000"
+                }
+
+                item.language = if (item.md5 == item.latestItaMD5 && item.installedVersion == item.latestVersion) {
+                    Utils.Companion.Flag.ITALIAN
+                } else if (File("$miReplacerDownloadFolderPath/$key/${it.value}$extension${Constants.useBestFileExtension}").isFile) {
+                    Utils.Companion.Flag.USEDBEST
+                } else if (item.installedVersion as Int >= item.latestVersion as Int) {
+                Utils.Companion.Flag.CHINESE
+                } else if (item.installedVersion as Int != item.latestVersion as Int) {
+                    Utils.Companion.Flag.USEBEST
                 } else {
                     Utils.Companion.Flag.OTHER
                 }
-
                 listInstalledPlugins.add(Pair(key, item))
+            }
+
+
+            else {
+
+                Utils.Companion.Flag.UNKNOWN
+                val key = it.key
+                val newItem = MiItem()
+                    with(newItem) {
+                        itemName = "Plugin Sconosciuto"
+                        imgLink = "http://xcape.esy.es/xiaomi/smarthome/img/000.png"
+                        folderNumber = 0
+                        itemNumber = 0
+                        downloadLink = ""
+                        latestItaMD5 = "00000000000000"
+                        latestVersion = 0
+                        previousItaMD5 = "00000000"
+                        previousVersion = 0
+                        language = Utils.Companion.Flag.UNKNOWN
+                        md5 = "000000000000"
+                    }
+
+                newItem.installedVersion = it.value.toInt()
+                newItem.folderNumber = it.key.toInt()
+                    listInstalledPlugins.add(Pair(key, newItem))
+
+                }
+
+
+
             }
 
 
@@ -177,4 +211,4 @@ class ReplacerFragment : Fragment() {
 
     }
 
-}
+

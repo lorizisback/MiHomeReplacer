@@ -4,83 +4,156 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mireplacer_dialog_container"
     android:layout_width="match_parent"
-    android:layout_height="55dp"
-    android:layout_margin="@dimen/margin_m"
-    android:background="@drawable/mihome_item_border"
-    android:elevation="5dp"
+    android:layout_height="65dp"
+    android:layout_marginBottom="5dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginTop="5dp"
+    android:background="@drawable/mihome_item_border_compact"
+    android:elevation="3dp"
     android:orientation="vertical">
 
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:text="@string/miitem_latest_version_label"
+        android:textColor="?android:attr/colorEdgeEffect"
+        android:textSize="8dp"
+        app:layout_constraintStart_toEndOf="@+id/mi_item_image"
+        app:layout_constraintTop_toTopOf="@+id/mi_item_image" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:text="@string/miitem_installed_version_label"
+        android:textColor="?android:attr/colorEdgeEffect"
+        android:textSize="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/mi_item_plugin_version"
+        app:layout_constraintStart_toEndOf="@+id/mi_item_image" />
+
+    <TextView
+        android:id="@+id/mi_item_plugin_folder"
+        android:layout_width="wrap_content"
+        android:layout_height="8dp"
+        android:gravity="top|center|start"
+        android:textSize="6sp"
+        android:textStyle="italic"
+        app:layout_constraintStart_toStartOf="@+id/mi_item_item_name"
+        app:layout_constraintTop_toBottomOf="@+id/mi_item_item_name"
+        tools:text="Cartella: 000" />
+
     <ImageView
         android:id="@+id/mi_item_image"
-        android:layout_width="30dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mi_item_item_name"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/mi_item_item_name"
         android:layout_width="0dp"
-        android:layout_height="26dp"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="3dp"
+        android:layout_height="15dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
         android:ellipsize="end"
+        android:gravity="right|center_vertical"
         android:maxLines="1"
         android:textColor="@color/darkText"
-        android:textSize="@dimen/text_size_xs"
-        app:layout_constraintBottom_toTopOf="@+id/mi_item_plugin_latest_version"
-        app:layout_constraintEnd_toStartOf="@+id/mi_item_image"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toStartOf="@+id/mi_item_flag"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/mi_item_flag"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_default="wrap"
-        tools:text="Depuratore per la casa " />
+        tools:text="Depuratore per la casa di CristinCristinCristinCristinCristinCristinCristin" />
 
     <TextView
         android:id="@+id/mi_item_plugin_latest_version"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="10dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         android:ellipsize="end"
+        android:gravity="center"
         android:maxLines="1"
-        android:textSize="@dimen/text_size_xxxs"
+        android:textSize="8dp"
         android:textStyle="italic"
-        app:layout_constraintBottom_toTopOf="@+id/mi_item_plugin_version"
-        app:layout_constraintEnd_toStartOf="@+id/mi_item_image"
-        app:layout_constraintStart_toEndOf="@+id/mi_item_flag"
+        app:layout_constraintStart_toEndOf="@+id/mi_item_image"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
         tools:text="v.023123" />
 
     <TextView
         android:id="@+id/mi_item_plugin_version"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginBottom="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="10dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         android:ellipsize="end"
+        android:gravity="center"
         android:maxLines="1"
-        android:textSize="@dimen/text_size_xxxs"
+        android:textSize="8dp"
         android:textStyle="italic"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/mi_item_image"
-        app:layout_constraintStart_toEndOf="@+id/mi_item_flag"
+        app:layout_constraintBottom_toBottomOf="@+id/mi_item_image"
+        app:layout_constraintStart_toEndOf="@+id/mi_item_image"
         tools:text="v.023123" />
+
+    <TextView
+        android:id="@+id/mi_item_plugin_notify"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:maxLines="5"
+        android:text="TextView"
+        android:textSize="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/mi_item_item_name" />
+
+    <ImageView
+        android:id="@+id/mi_icon_status"
+        android:layout_width="8dp"
+        android:layout_height="15dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/mi_item_flag"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/mi_item_item_name"
+        app:layout_constraintTop_toTopOf="@+id/mi_item_item_name"
+        app:srcCompat="@drawable/xc_rdot" />
 
     <ImageView
         android:id="@+id/mi_item_flag"
-        android:layout_width="20dp"
-        android:layout_height="match_parent"
-        android:adjustViewBounds="false"
-        android:cropToPadding="false"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/chinese_flag"
-        tools:layout_editor_absoluteX="0dp" />
+        app:srcCompat="@drawable/ita_compact" />
 
 
 </android.support.constraint.ConstraintLayout>

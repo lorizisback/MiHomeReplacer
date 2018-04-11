@@ -17,7 +17,6 @@ class Constants {
         var baseURL = "http://xcape.esy.es/xiaomi/smarthome/IT/"
         var remoteFileExtension = ".IT"
         var packageFileExtension = ".mpk"
-        var archiveFileExtension = ".arc"
         var useBestFileExtension = ".marker"
         var pluginDownloadFolder = Environment.getExternalStorageDirectory().path + "/plugin/download"
         var baseFolder = Environment.getExternalStorageDirectory().path + "/plugin"
@@ -27,7 +26,7 @@ class Constants {
         var sharedPrefsLayoutMode = "ALT_LAYOUT"
 
         fun getMiReplacerDownloadFolder() : String {
-            return baseFolder + "/" + miReplacerFolderName + "/" + miReplacerDownloadFolderName
+            return "$baseFolder/$miReplacerFolderName/$miReplacerDownloadFolderName"
         }
 
     }

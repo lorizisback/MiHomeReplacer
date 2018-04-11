@@ -5,14 +5,13 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import kotlinx.android.synthetic.main.top_panel.*
+import kotlinx.android.synthetic.main.bottom_panel.*
 import org.loriz.mireplacer.core.Constants
 import org.loriz.mireplacer.fragments.ReplacerFragment
 import org.loriz.mireplacer.fragments.WarningFragment
 import org.loriz.mireplacer.utils.Utils
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
-
 
 
 /**
@@ -29,7 +28,8 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        supportActionBar?.title = getString(R.string.app_name) +" "+ getString(R.string.mi_home_version_prefix) + getString(R.string.mi_home_version) + " Alpha"
+        supportActionBar?.title = getString(R.string.app_name) +" "+ getString(R.string.mi_home_version_prefix) + getString(R.string.mi_home_version) + " Beta"
+
 
         with (getPreferences(Context.MODE_PRIVATE)) {
             if (!this.contains(Constants.sharedPrefsLayoutMode)) {
@@ -42,14 +42,14 @@ class MainActivity : AppCompatActivity() {
         Utils.prepareMiReplacerFolder()
 
         Utils.killProcess(this, resources.getString(R.string.mi_home_package_name))
-        Utils.killProcess(this, resources.getString(R.string.mi_home_package_name))
-        Utils.killProcess(this, resources.getString(R.string.mi_home_package_name))
 
         setupView()
 
-
         super.onCreate(savedInstanceState)
     }
+
+
+
 
 
     private fun setupView() {
@@ -61,32 +61,32 @@ class MainActivity : AppCompatActivity() {
         if (isInstalled) {
             //mi home installed! proceed to differentiate modded and stock version
 
-            top_panel_image_container.visibility = View.VISIBLE
+            bottom_panel_icon_container.visibility = View.VISIBLE
 
             miHomeVersion = Utils.getMiHomeVersion(this)
             isPVersion = (miHomeVersion?.endsWith(".00", true) ?: false)
             if (isPVersion) {
-                top_panel_mihome_mod_icon.visibility = View.VISIBLE
-                top_panel_mihome_stock_icon.visibility = View.GONE
-                top_panel_main_text.text = resources.getString(R.string.mihome_mod_detected)
+                bottom_panel_mihome_mod_icon.visibility = View.VISIBLE
+                bottom_panel_mihome_stock_icon.visibility = View.GONE
+                bottom_panel_main_text.text = resources.getString(R.string.mihome_mod_detected)
             } else {
-                top_panel_mihome_mod_icon.visibility = View.GONE
-                top_panel_mihome_stock_icon.visibility = View.VISIBLE
-                top_panel_main_text.text = resources.getString(R.string.mihome_stock_detected)
+                bottom_panel_mihome_mod_icon.visibility = View.GONE
+                bottom_panel_mihome_stock_icon.visibility = View.VISIBLE
+                bottom_panel_main_text.text = resources.getString(R.string.mihome_stock_detected)
             }
 
-            top_panel_version_text_upper.text = resources.getString(R.string.mi_home_version_prefix) + miHomeVersion
+            bottom_panel_version_text_upper.text = resources.getString(R.string.mi_home_version_prefix) + miHomeVersion
 
         } else {
 
             //mi home not installed! prompt to install "P" version
 
-            top_panel_mihome_mod_icon.visibility = View.GONE
-            top_panel_no_mihome_icon.visibility = View.VISIBLE
+            bottom_panel_mihome_mod_icon.visibility = View.GONE
+            bottom_panel_no_mihome_icon.visibility = View.VISIBLE
 
-            top_panel_main_text.text = resources.getString(R.string.mi_home_not_detected)
+            bottom_panel_main_text.text = resources.getString(R.string.mi_home_not_detected)
 
-            top_panel_version_text_upper.visibility = View.GONE
+            bottom_panel_version_text_upper.visibility = View.GONE
 
         }
 

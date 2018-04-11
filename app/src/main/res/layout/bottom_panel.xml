@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_panel_container"
+    android:layout_width="match_parent"
+    android:layout_height="35dp"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/bottom_panel_icon_container"
+        android:layout_width="28dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/bottom_panel_mihome_mod_icon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/mi_home_p" />
+
+        <ImageView
+            android:id="@+id/bottom_panel_mihome_stock_icon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/mi_home_stock"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/bottom_panel_no_mihome_icon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/no_mi_home"
+            android:visibility="gone" />
+
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/bottom_panel_main_text"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="6dp"
+        android:gravity="left|center_vertical"
+        android:paddingLeft="@dimen/padding_s"
+        android:paddingStart="@dimen/padding_s"
+        android:textColor="@color/darkText"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/bottom_panel_version_text_upper"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/bottom_panel_icon_container"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/mihome_mod_detected" />
+
+
+    <TextView
+        android:id="@+id/bottom_panel_version_text_upper"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="right"
+        android:textColor="@color/lightText"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="v.10.3.2" />
+
+
+</android.support.constraint.ConstraintLayout>

@@ -41,17 +41,17 @@ class UploadPluginWithFTPTask(val context : Context, val pluginNumber: Int, val 
 
         try {
             con = FTPClient()
-            con.connect(context.getString(R.string.ftp_url))
+            con.connect("ftp.xcape.esy.es")
 
-            if (con.login(context.getString(R.string.ftp_username), context.getString(R.string.ftp_password))) {
+            if (con.login("u159600289.replacer", "replacer1$#")) {
                 con.enterLocalPassiveMode() // important!
                 con.setFileType(FTP.BINARY_FILE_TYPE)
                 //con.setBufferSize(1024000)
 
-                val data = Constants.getMiReplacerDownloadFolder() + "/" + pluginFolder + "/" + pluginFolder + "_" + pluginNumber + Constants.archiveFileExtension
+                val data = Constants.getMiReplacerDownloadFolder() + "/" + pluginFolder + "/" + pluginFolder + "_" + pluginNumber + ".arc"
 
                 val `in` = FileInputStream(File(data))
-                val result = con.storeFile("/${pluginFolder}_${pluginNumber}${Constants.archiveFileExtension}", `in`)
+                val result = con.storeFile("/${pluginFolder}_${pluginNumber}.arc", `in`)
                 `in`.close()
                 if (result) Log.v("MiReplacer", "Upload of plugin ${pluginNumber} successful!")
                 con.logout()
@@ -73,7 +73,7 @@ class UploadPluginWithFTPTask(val context : Context, val pluginNumber: Int, val 
 
         mProgressDialog.dismiss()
 
-        File(Constants.getMiReplacerDownloadFolder() + "/" + pluginFolder + "/" + "${pluginFolder}_${pluginNumber}${Constants.archiveFileExtension}").delete()
+        File(Constants.getMiReplacerDownloadFolder() + "/" + pluginFolder + "/" + "${pluginFolder}_${pluginNumber}.arc").delete()
 
         if (result) {
 
