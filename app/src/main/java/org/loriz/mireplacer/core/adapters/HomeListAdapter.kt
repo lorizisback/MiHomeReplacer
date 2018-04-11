@@ -361,8 +361,6 @@ class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair
 
             } else if (item.second.language == Utils.Companion.Flag.UNKNOWN) {
 
-
-
                 val xcapeDialog = AppCompatDialog(context)
                 xcapeDialog.setContentView(R.layout.mihome_dialog)
                 xcapeDialog.setCanceledOnTouchOutside(false)
@@ -413,11 +411,8 @@ class HomeListAdapter(val context: Context, val installedPlugins: ArrayList<Pair
                     }).execute()
                 }
 
-
                 negative?.setOnClickListener {
                     xcapeDialog.dismiss()
-                    UpdatePluginTask(context, item.second, onPluginManagementListener, item.second.latestVersion).execute()
-
                 }
 
                 xcapeDialog.show()

@@ -8,6 +8,7 @@ import android.os.Handler
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import com.crashlytics.android.Crashlytics
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator
 import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache
@@ -16,6 +17,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader
 import com.nostra13.universalimageloader.utils.StorageUtils
+import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_splashscreen.*
 import org.jsoup.select.Elements
 import org.loriz.mireplacer.core.Constants
@@ -35,6 +37,8 @@ class SplashScreenActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        Fabric.with(this, Crashlytics())
 
         setContentView(R.layout.activity_splashscreen)
 
